@@ -3,21 +3,21 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class settings extends AppCompatActivity {
-
-    BottomNavigationView nav;
+public class addproject extends AppCompatActivity {
+BottomNavigationView nav;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_addproject);
 
         nav=findViewById(R.id.nav);
         nav.setSelectedItemId(R.id.settings);
@@ -31,14 +31,14 @@ public class settings extends AppCompatActivity {
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.settings:
+                        startActivity(new Intent(getApplicationContext(),settings.class));
+                        overridePendingTransition(0,0);
                         return true;
                     case R.id.add_friends:
                         startActivity(new Intent(getApplicationContext(),addfriends.class));
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.add_project:
-                        startActivity(new Intent(getApplicationContext(),addproject.class));
-                        overridePendingTransition(0,0);
                         return true;
                     default:
 

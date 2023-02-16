@@ -20,39 +20,36 @@ public class welcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        
 
 
         nav=findViewById(R.id.nav);
-
+        nav.setSelectedItemId(R.id.home);
         nav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 switch (item.getItemId()) {
                     case R.id.home:
-                        Toast.makeText(welcomeActivity.this, "Home", Toast.LENGTH_LONG).show();
+                        return true;
 
-                        switch (item.getItemId()) {
+
                             case R.id.settings:
-                                Toast.makeText(welcomeActivity.this, "Settings", Toast.LENGTH_LONG).show();
-
-                                switch (item.getItemId()) {
+                                startActivity(new Intent(getApplicationContext(),settings.class));
+                                overridePendingTransition(0,0);
+                                return true;
                                     case R.id.add_friends:
-                                        Toast.makeText(welcomeActivity.this, "Add Friends", Toast.LENGTH_LONG).show();
-
-                                        switch (item.getItemId()) {
+                                        startActivity(new Intent(getApplicationContext(),addfriends.class));
+                                        overridePendingTransition(0,0);
+                                        return true;
                                             case R.id.add_project:
-                                                Toast.makeText(welcomeActivity.this, "Add Projects", Toast.LENGTH_LONG).show();
-
+                                                startActivity(new Intent(getApplicationContext(),addproject.class));
+                                                overridePendingTransition(0,0);
+                                                return true;
                                             default:
 
                                         }
-
-
-                                }
-                        }
-                }
-                return true;
+                                        return false;
             }
         });
     }
