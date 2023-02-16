@@ -57,6 +57,7 @@ public class register extends AppCompatActivity {
                     mpasswordConfirm.setError("Password is different");
                     return;
                 }
+                startActivity(new Intent(getApplicationContext(),welcomeActivity.class));
             }
         });
     }
