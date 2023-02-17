@@ -10,6 +10,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText username;
@@ -17,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     Button loginButton;
 
     TextView msignupText;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
         msignupText = findViewById(R.id.signupText);
-
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

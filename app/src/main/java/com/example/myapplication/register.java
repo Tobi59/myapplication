@@ -10,6 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 public class register extends AppCompatActivity {
 
     public static final String TAG = "TAG";
@@ -17,6 +24,8 @@ public class register extends AppCompatActivity {
     Button mregisterButton;
     TextView mcreateText;
 
+    // refs à la DB
+    DatabaseReference mDataBase = FirebaseDatabase.getInstance("https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("compte");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +53,7 @@ public class register extends AppCompatActivity {
                 String password = mpasswordRegister.getText().toString().trim();
                 String passwordConfirm = mpasswordConfirm.getText().toString().trim();
 
+                String userID = "6";
                 if(TextUtils.isEmpty(username)){
                     musernameRegister.setError("Username is required");
                     return;
@@ -52,11 +62,11 @@ public class register extends AppCompatActivity {
                     mpasswordRegister.setError("Password is required");
                     return;
                 }
-
-                if(passwordConfirm != password){
+                if(!passwordConfirm.equals(password)){
                     mpasswordConfirm.setError("Password is different");
                     return;
                 }
+                mDataBase.child("users").child(username).setValue("user"+userID);
                 startActivity(new Intent(getApplicationContext(),welcomeActivity.class));
             }
         });
