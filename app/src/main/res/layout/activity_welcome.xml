@@ -9,15 +9,14 @@
     android:layout_width="wrap_content">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Home"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        android:layout_centerInParent="true"
-        android:textColor="@color/black"/>
-
-
+        android:fontFamily="@font/lhandw"
+        android:gravity="center"
+        android:text="GestPro"
+        android:textColor="@color/color_back_login"
+        android:textSize="40sp"
+        android:textStyle="bold" />
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:id="@+id/nav"
@@ -30,6 +29,77 @@
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="677dp"
         tools:ignore="MissingConstraints" />
+
+    <RelativeLayout
+        tools:context=".welcomeActivity"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="250dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:fontFamily="@font/lhandw"
+            android:text="Mes projets"
+            android:textColor="@color/color_back_login"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="32dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:background="@drawable/custome_edittext"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Création d'une application"
+                android:textColor="@color/black"
+                android:translationY="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Voir +"
+                android:textColor="@color/color_back_login"
+                android:textStyle="bold"
+                android:translationX="130dp"
+                android:translationY="-10dp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="300dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mes amis"
+            android:textColor="@color/color_back_login"
+            android:textSize="25sp"
+            android:layout_marginTop="200dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/lhandw"/>
+    </RelativeLayout>
+
+
+
+
 </RelativeLayout>
 
 
