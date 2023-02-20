@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,28 +10,31 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.util.Log;
+import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class register extends AppCompatActivity {
-
     public static final String TAG = "TAG";
     EditText mpasswordConfirm,mpasswordRegister, musernameRegister;
     Button mregisterButton;
     TextView mcreateText;
-
-    // refs à la DB
-    DatabaseReference mDataBase = FirebaseDatabase.getInstance("https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("compte");
+    //création de l'instance FireBase
+    private FirebaseAuth mAuth;
+    private void updateUI(FirebaseUser user) {
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+        //récupère l'instance de Firebase pour accéder au projet
+        mAuth = FirebaseAuth.getInstance();
         musernameRegister = findViewById(R.id.usernameRegister);
         mpasswordRegister = findViewById(R.id.passwordRegister);
         mpasswordConfirm = findViewById(R.id.passwordConfirm);
@@ -38,7 +42,6 @@ public class register extends AppCompatActivity {
         mcreateText = findViewById(R.id.createText);
 
         mcreateText.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
@@ -46,29 +49,57 @@ public class register extends AppCompatActivity {
         });
 
         mregisterButton.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View view) {
-                final String username = musernameRegister.getText().toString().trim();
+                final String email = musernameRegister.getText().toString().trim();
                 String password = mpasswordRegister.getText().toString().trim();
                 String passwordConfirm = mpasswordConfirm.getText().toString().trim();
-
-                String userID = "6";
-                if(TextUtils.isEmpty(username)){
+                //vérifie que l'email est bien remplie
+                if(TextUtils.isEmpty(email)){
                     musernameRegister.setError("Username is required");
                     return;
                 }
+                //vérifie que le mot de passe est bien rempli
                 if(TextUtils.isEmpty(password)){
                     mpasswordRegister.setError("Password is required");
                     return;
                 }
+                //vérifie que les 2 mots de passe concordent
                 if(!passwordConfirm.equals(password)){
                     mpasswordConfirm.setError("Password is different");
                     return;
                 }
-                mDataBase.child("users").child(username).setValue("user"+userID);
+                //appel de la fonction pour créer le compte dans firebase
+                createAccount(email,password);
+                //rendez vous sur la page d'accueil
                 startActivity(new Intent(getApplicationContext(),welcomeActivity.class));
             }
         });
+    }
+    //class qui vérifie si l'utilisateur n'est pas déjà connecté
+    @Override
+    public void onStart() {
+        super.onStart();
+        // vérifie que l'utilisateur n'est pas connecté, mets à jour l'UI si besoin
+        FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
+        if(currentUser != null){
+            currentUser.reload();//si un utilisateur est co, on reload
+        }
+    }
+    //classe pour la création de compte
+    private void createAccount(String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)//méthode qui crée un user dans firebase
+                .addOnCompleteListener(this, task -> {//lorsque c'est fait
+                    if (task.isSuccessful()) {//si c'est réussi on met à jour l'ui avec les infos de l'utilisateur actuel
+                        Log.d(TAG, "createUserWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();//récupère les infos
+                        updateUI(user);//Reload
+                    } else {//si c'est un échec on prévient et on reload
+                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                        Toast.makeText(register.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                        updateUI(null);
+                    }
+                });
     }
 }
