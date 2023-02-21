@@ -19,10 +19,15 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class register extends AppCompatActivity {
     public static final String TAG = "TAG";
-    EditText mpasswordConfirm,mpasswordRegister, musernameRegister;
+    EditText mpasswordConfirm,mpasswordRegister, musernameRegister,memailRegister;
     Button mregisterButton;
     TextView mcreateText;
     //création de l'instance FireBase
@@ -34,6 +39,7 @@ public class register extends AppCompatActivity {
 
         //récupère l'instance de Firebase pour accéder au projet
         mAuth = FirebaseAuth.getInstance();
+        memailRegister = findViewById(R.id.emailRegister);
         musernameRegister = findViewById(R.id.usernameRegister);
         mpasswordRegister = findViewById(R.id.passwordRegister);
         mpasswordConfirm = findViewById(R.id.passwordConfirm);
@@ -50,9 +56,10 @@ public class register extends AppCompatActivity {
         mregisterButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                final String email = musernameRegister.getText().toString().trim();
+                String email = memailRegister.getText().toString().trim();
                 String password = mpasswordRegister.getText().toString().trim();
                 String passwordConfirm = mpasswordConfirm.getText().toString().trim();
+                String username = musernameRegister.getText().toString().trim();
                 //vérifie que l'email est bien remplie
                 if(TextUtils.isEmpty(email)){
                     musernameRegister.setError("Username is required");
@@ -69,7 +76,7 @@ public class register extends AppCompatActivity {
                     return;
                 }
                 //appel de la fonction pour créer le compte dans firebase
-                createAccount(email,password);
+                createAccount(email,password,username);
             }
         });
     }
@@ -86,24 +93,30 @@ public class register extends AppCompatActivity {
         }
     }
     //classe pour la création de compte
-    private void createAccount(String email, String password) {
+    private void createAccount(String email, String password,String username) {
         mAuth.createUserWithEmailAndPassword(email, password)//méthode qui crée un user dans firebase
                 .addOnCompleteListener(this, task -> {//lorsque c'est fait
                     if (task.isSuccessful()) {//si c'est réussi on met à jour l'ui avec les infos de l'utilisateur actuel
                         Log.d(TAG, "createUserWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        String uid = user.getUid();
+                        // Obtenez une référence à l'emplacement de l'enfant dans la base de données
+                        DatabaseReference ref = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(uid);
+                        // Créez une map pour stocker les paires clé-valeur
+                        Map<String, Object> enfantUpdates = new HashMap<>();
+                        // Ajoutez les nouvelles valeurs en utilisant les clés de votre choix
+                        enfantUpdates.put("email", email);
+                        enfantUpdates.put("UID", uid);
+                        enfantUpdates.put("username", username);
+                        // Utilisez la méthode updateChildren() pour mettre à jour l'enfant avec les nouvelles valeurs
+                        ref.updateChildren(enfantUpdates);
                         //rendez vous sur la page d'accueil
                         startActivity(new Intent(getApplicationContext(),welcomeActivity.class));
-                        FirebaseUser user = mAuth.getCurrentUser();//récupère les infos
-                        updateUI(user);//Reload
                     } else {//si c'est un échec on prévient et on reload
                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
                         Toast.makeText(register.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
-                        updateUI(null);
                     }
                 });
-    }
-    //class pour l'update de l'interface
-    private void updateUI(FirebaseUser user) {
     }
 }
