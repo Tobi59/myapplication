@@ -39,7 +39,7 @@
             android:id="@+id/username"
             android:background="@drawable/custome_edittext"
             android:drawablePadding="8dp"
-            android:hint="Username"
+            android:hint="Mail Adress"
             android:padding="8dp"
             android:textColor="@color/color_back_login"
             android:layout_marginTop="40dp"/>
