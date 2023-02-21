@@ -57,7 +57,7 @@ public class settings extends AppCompatActivity {
         super.onStart();
         // vérifie que l'utilisateur n'est pas connecté, mets à jour l'UI si besoin
         FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
-        if(currentUser == null){
+        if(currentUser==null){
             startActivity(new Intent(getApplicationContext(),register.class));
         }
     }

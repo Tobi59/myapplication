@@ -26,7 +26,7 @@ public class addproject extends AppCompatActivity {
         //instance de l'authentification
         mAuth = FirebaseAuth.getInstance();
         nav=findViewById(R.id.nav);
-        nav.setSelectedItemId(R.id.settings);
+        nav.setSelectedItemId(R.id.add_project);
         nav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -58,7 +58,7 @@ public class addproject extends AppCompatActivity {
         super.onStart();
         // vérifie que l'utilisateur n'est pas connecté, mets à jour l'UI si besoin
         FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
-        if(currentUser == null){
+        if(currentUser==null){
             startActivity(new Intent(getApplicationContext(),register.class));
         }
     }

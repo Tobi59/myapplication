@@ -3,10 +3,12 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -15,10 +17,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class welcomeActivity extends AppCompatActivity {
-
     BottomNavigationView nav;
     //création de l'instance FireBase
     private FirebaseAuth mAuth;
+    Button mdecoButton;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +29,20 @@ public class welcomeActivity extends AppCompatActivity {
         //instance de l'authentification
         mAuth = FirebaseAuth.getInstance();
 
+        mdecoButton = findViewById(R.id.deconnexionButton);
         nav=findViewById(R.id.nav);
         nav.setSelectedItemId(R.id.home);
+
+        //méthode de déconnexion
+        mdecoButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                if(mAuth.getCurrentUser()==null){
+                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                }
+            }
+        });
         nav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -60,7 +75,7 @@ public class welcomeActivity extends AppCompatActivity {
         super.onStart();
         // vérifie que l'utilisateur n'est pas connecté, mets à jour l'UI si besoin
         FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
-        if(currentUser == null){
+        if(currentUser==null){
             startActivity(new Intent(getApplicationContext(),register.class));
         }
     }

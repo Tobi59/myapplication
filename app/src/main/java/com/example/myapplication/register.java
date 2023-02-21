@@ -70,8 +70,6 @@ public class register extends AppCompatActivity {
                 }
                 //appel de la fonction pour créer le compte dans firebase
                 createAccount(email,password);
-                //rendez vous sur la page d'accueil
-                startActivity(new Intent(getApplicationContext(),welcomeActivity.class));
             }
         });
     }
@@ -81,7 +79,9 @@ public class register extends AppCompatActivity {
         super.onStart();
         // vérifie que l'utilisateur n'est pas connecté, mets à jour l'UI si besoin
         FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
-        if(currentUser != null){
+        System.out.println(currentUser);//debug
+        if(currentUser!=null){
+            System.out.println(currentUser);//debug
             startActivity(new Intent(getApplicationContext(),welcomeActivity.class));
         }
     }
@@ -91,6 +91,8 @@ public class register extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {//lorsque c'est fait
                     if (task.isSuccessful()) {//si c'est réussi on met à jour l'ui avec les infos de l'utilisateur actuel
                         Log.d(TAG, "createUserWithEmail:success");
+                        //rendez vous sur la page d'accueil
+                        startActivity(new Intent(getApplicationContext(),welcomeActivity.class));
                         FirebaseUser user = mAuth.getCurrentUser();//récupère les infos
                         updateUI(user);//Reload
                     } else {//si c'est un échec on prévient et on reload
