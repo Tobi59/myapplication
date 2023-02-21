@@ -27,12 +27,11 @@ public class register extends AppCompatActivity {
     TextView mcreateText;
     //création de l'instance FireBase
     private FirebaseAuth mAuth;
-    private void updateUI(FirebaseUser user) {
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
         //récupère l'instance de Firebase pour accéder au projet
         mAuth = FirebaseAuth.getInstance();
         musernameRegister = findViewById(R.id.usernameRegister);
@@ -83,7 +82,7 @@ public class register extends AppCompatActivity {
         // vérifie que l'utilisateur n'est pas connecté, mets à jour l'UI si besoin
         FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
         if(currentUser != null){
-            currentUser.reload();//si un utilisateur est co, on reload
+            startActivity(new Intent(getApplicationContext(),welcomeActivity.class));
         }
     }
     //classe pour la création de compte
@@ -101,5 +100,8 @@ public class register extends AppCompatActivity {
                         updateUI(null);
                     }
                 });
+    }
+    //class pour l'update de l'interface
+    private void updateUI(FirebaseUser user) {
     }
 }

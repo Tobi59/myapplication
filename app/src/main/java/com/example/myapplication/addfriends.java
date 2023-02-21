@@ -10,17 +10,22 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class addfriends extends AppCompatActivity {
 
     BottomNavigationView nav;
-
+    //création de l'instance FireBase
+    private FirebaseAuth mAuth;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addfriends);
 
+        //instance de l'authentification
+        mAuth = FirebaseAuth.getInstance();
         nav=findViewById(R.id.nav);
         nav.setSelectedItemId(R.id.settings);
         nav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -48,6 +53,14 @@ public class addfriends extends AppCompatActivity {
                 return false;
             }
         });
+    }
+    public void onStart() {
+        super.onStart();
+        // vérifie que l'utilisateur n'est pas connecté, mets à jour l'UI si besoin
+        FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
+        if(currentUser == null){
+            startActivity(new Intent(getApplicationContext(),register.class));
+        }
     }
 }
 
