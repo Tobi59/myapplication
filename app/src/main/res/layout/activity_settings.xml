@@ -27,6 +27,29 @@
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="677dp"
         tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/newMail"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/custome_edittext"
+        android:drawablePadding="8dp"
+        android:hint="new mail"
+        android:inputType="text"
+        android:padding="8dp"
+        android:textColor="@color/color_back_login" />
+
+    <Button
+        android:id="@+id/ChangeButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/newMail"
+        android:layout_marginTop="33dp"
+        android:backgroundTint="@color/color_back_login"
+        android:text="Change"
+        android:textSize="18sp" />
+
     <Button
         android:id="@+id/deconnexionButton"
         android:layout_width="280dp"
