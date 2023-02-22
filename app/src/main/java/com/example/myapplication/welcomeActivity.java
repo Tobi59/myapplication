@@ -29,7 +29,6 @@ public class welcomeActivity extends AppCompatActivity {
     BottomNavigationView nav;
     //création de l'instance FireBase
     private FirebaseAuth mAuth;
-    Button mdecoButton;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,21 +36,8 @@ public class welcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
         //instance de l'authentification
         mAuth = FirebaseAuth.getInstance();
-
-        mdecoButton = findViewById(R.id.deconnexionButton);
         nav=findViewById(R.id.nav);
         nav.setSelectedItemId(R.id.home);
-
-        //méthode de déconnexion
-        mdecoButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                if(mAuth.getCurrentUser()==null){
-                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                }
-            }
-        });
         nav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -82,9 +68,8 @@ public class welcomeActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // vérifie que l'utilisateur n'est pas connecté, mets à jour l'UI si besoin
         FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
-        String uid = currentUser.getUid();
+        String uid = currentUser.getUid();//récupère l'ID de l'utilisateur actuel
         DatabaseReference ref = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(uid);
         ref.get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {

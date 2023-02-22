@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -16,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class settings extends AppCompatActivity {
 
     BottomNavigationView nav;
+    Button mdecoButton;
     //création de l'instance FireBase
     private FirebaseAuth mAuth;
     @Override
@@ -25,6 +27,7 @@ public class settings extends AppCompatActivity {
 
         //instance de l'authentification
         mAuth = FirebaseAuth.getInstance();
+        mdecoButton = findViewById(R.id.deconnexionButton);
         nav=findViewById(R.id.nav);
         nav.setSelectedItemId(R.id.settings);
         nav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -50,6 +53,16 @@ public class settings extends AppCompatActivity {
 
                 }
                 return false;
+            }
+        });
+        //méthode de déconnexion
+        mdecoButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                if(mAuth.getCurrentUser()==null){
+                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                }
             }
         });
     }
