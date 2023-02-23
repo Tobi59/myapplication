@@ -73,15 +73,15 @@ public class welcomeActivity extends AppCompatActivity {
         DatabaseReference ref = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(uid);
         ref.get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
-                Log.e("firebase", "Error getting data", task.getException());
+                Log.e("firebase", "Error getting data", task.getException());//debug
             }
             else {
-                Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                Log.d("firebase", String.valueOf(task.getResult().getValue()));//debug
                 // Récupérer le résultat sous forme de Map<String, Object>
                 Map<String, Object> result = (Map<String, Object>) task.getResult().getValue();
                 // Extraire la valeur de "username"
                 String username = (String) result.get("username");
-                System.out.println(username);
+                System.out.println(username);//debug
                 Toast.makeText(welcomeActivity.this, "Bienvenue "+username+" !",
                         Toast.LENGTH_SHORT).show();
             }

@@ -5,15 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".settings">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Settings"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        android:layout_centerInParent="true"
-        android:textColor="@color/black"/>
-
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
@@ -28,11 +19,17 @@
         tools:layout_editor_absoluteY="677dp"
         tools:ignore="MissingConstraints" />
 
+
     <EditText
         android:id="@+id/newMail"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="70dp"
         android:background="@drawable/custome_edittext"
         android:drawablePadding="8dp"
         android:hint="new mail"
@@ -41,11 +38,77 @@
         android:textColor="@color/color_back_login" />
 
     <Button
-        android:id="@+id/ChangeButton"
+        android:id="@+id/ChangeButtonMDP"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/newMDP"
+        android:layout_alignStart="@+id/newMail"
+        android:layout_alignEnd="@+id/newMail"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="60dp"
+        android:backgroundTint="@color/color_back_login"
+        android:text="Change"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/newMDP"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ChangeButton"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="70dp"
+        android:background="@drawable/custome_edittext"
+        android:drawablePadding="8dp"
+        android:hint="new mdp"
+        android:inputType="text"
+        android:padding="8dp"
+        android:textColor="@color/color_back_login" />
+
+    <Button
+        android:id="@+id/ChangeButton"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/newMail"
-        android:layout_marginTop="33dp"
+        android:layout_alignStart="@+id/newMail"
+        android:layout_alignEnd="@+id/newMail"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="60dp"
+        android:backgroundTint="@color/color_back_login"
+        android:text="Change"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/newUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ChangeButtonMDP"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="70dp"
+        android:background="@drawable/custome_edittext"
+        android:drawablePadding="8dp"
+        android:hint="new username"
+        android:inputType="text"
+        android:padding="8dp"
+        android:textColor="@color/color_back_login" />
+
+    <Button
+        android:id="@+id/ChangeButtonUsername"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/newUsername"
+        android:layout_alignStart="@+id/newMail"
+        android:layout_alignEnd="@+id/newMail"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="60dp"
         android:backgroundTint="@color/color_back_login"
         android:text="Change"
         android:textSize="18sp" />
@@ -60,7 +123,7 @@
         android:layout_marginStart="65dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="65dp"
-        android:layout_marginBottom="0dp"
+        android:layout_marginBottom="20dp"
         android:backgroundTint="@color/color_back_login"
         android:text="Déconnexion"
         android:textSize="18sp" />
