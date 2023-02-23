@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     Button loginButton;
     TextView msignupText;
 
+
     //création de l'instance FireBase
     private FirebaseAuth mAuth;
     @Override
