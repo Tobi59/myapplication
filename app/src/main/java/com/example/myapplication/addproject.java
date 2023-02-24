@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,23 +22,75 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.IgnoreExtraProperties;
 
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Calendar;
+import java.util.Map;
 
-
+@IgnoreExtraProperties
 public class addproject extends AppCompatActivity {
+    private int id;
+    private String nom;
+    private String description;
+    private String DateDebut;
+    private String DateFin;
+
+    private String participants;
+
+    public addproject(){
+
+    }
+
+    public addproject(int id, String nom, String description) {
+        this.id = id;
+        this.nom = nom;
+        this.description = description;
+        //this.DateDebut = DateDebut;
+        //this.DateFin = DateFin;
+        //this.participants = participants;
+    }
+    /*public int getId() {
+        return id;
+    }
+    public String getNom() {
+        return nom;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public String getDateDebut() {
+        return DateDebut;
+    }
+    public String getDateFin() {
+        return DateFin;
+    }
+    public String getParticipants(){
+        return participants;
+    }
+    */
+
     BottomNavigationView nav;
     //création de l'instance FireBase
     private FirebaseAuth mAuth;
+
 
     String[] friends = {"Alice", "Bob", "Charlie", "Dave", "Eve", "Frank"};
     private ListView mFriendsListView;
@@ -45,12 +98,21 @@ public class addproject extends AppCompatActivity {
     private Button BoutonCreation;
     private TextView mSelectedCarateristiqueText;
     private Button mParticipants_button;
-    private Context context;
+
+    //private Context context;
+    private static final String TAG = "AddProjectActivity";
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addproject);
+
+        //Initialisé la firebase pour Projets
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference projetsRef = db.collection("Projets");
+
+
 
         //Recuperer le nom du projet
         TextInputLayout textProjectName = findViewById(R.id.Project_Name);
@@ -80,7 +142,11 @@ public class addproject extends AppCompatActivity {
                         selectedDateDebut.set(Calendar.YEAR, year);
                         selectedDateDebut.set(Calendar.MONTH, month);
                         selectedDateDebut.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        Date date = selectedDateDebut.getTime();
+                        Date DateChoisieDebut = selectedDateDebut.getTime();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        String selectedDateString = dateFormat.format(DateChoisieDebut);
+                        String DateDebut = selectedDateString;
+
                     }
                 }, year, month, dayOfMonth);
                 datePickerDialog.show();
@@ -107,7 +173,11 @@ public class addproject extends AppCompatActivity {
                         selectedDateFin.set(Calendar.YEAR, year);
                         selectedDateFin.set(Calendar.MONTH, month);
                         selectedDateFin.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        Date Date = selectedDateFin.getTime();
+                        Date DateChoisieFin = selectedDateFin.getTime();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        String selectedDateString = dateFormat.format(DateChoisieFin);
+                        String DateFin = selectedDateString;
+
                     }
                 }, year, month, dayOfMonth);
                 datePickerDialog.show();
@@ -145,13 +215,36 @@ public class addproject extends AppCompatActivity {
                     }
                 }
                 String selectedParticipantsString = selectedFriends.toString();
-                mSelectedCarateristiqueText.setText("Nom du Projet : " + userProjectName +"\n"+ "Date de debut : "+  selectedDateDebut.getTime().toString()  + "\n"+ "Date de fin : "+ selectedDateFin.getTime().toString()  + "\n" +"Participants : " + selectedParticipantsString + "\n" +"Description" + userDescription);
+                mSelectedCarateristiqueText.setText("Nom du Projet : " + userProjectName +"\n"+ "Date de debut : "+  selectedDateDebut.getTime().toString()  + "\n"+ "Date de fin : "+ selectedDateFin.getTime().toString()  + "\n" +"Participants : " + selectedParticipantsString + "\n" +"Description : " + userDescription);
+                //Creer le projet dans la databse
+                Map<String, Object> projetMap = new HashMap<>();
+                projetMap.put("ID : ", id);
+                projetMap.put("Nom :", textProjectNameEditText.getText().toString());
+                projetMap.put("Description :", textDescriptionEditText.getText().toString());
+                projetMap.put("Date de Debut :", selectedDateDebut.getTime().toString() );
+                projetMap.put("Date de Fin :", selectedDateFin.getTime().toString() );
+                projetMap.put("Participants :",selectedParticipantsString);
 
+                projetsRef.add(projetMap)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d(TAG, "Projet ajouté avec l'ID : " + documentReference.getId());
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Erreur lors de l'ajout du projet", e);
+                            }
+                        });
             }
+
+
+
         });
 
 
-        //Gestion des participants au projet
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(
         //        this, android.R.layout.simple_dropdown_item_1line, friends);
         //AutoCompleteTextView textView = findViewById(R.id.ListeParticipants);
