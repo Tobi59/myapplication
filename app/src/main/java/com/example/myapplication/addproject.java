@@ -96,7 +96,6 @@ public class addproject extends AppCompatActivity {
     private ListView mFriendsListView;
     private ArrayAdapter<String> mFriendsAdapter;
     private Button BoutonCreation;
-    private TextView mSelectedCarateristiqueText;
     private Button mParticipants_button;
 
     //Variable lié au Date
@@ -191,7 +190,6 @@ public class addproject extends AppCompatActivity {
         mFriendsListView.setAdapter(mFriendsAdapter);
         mFriendsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-        mSelectedCarateristiqueText = findViewById(R.id.selected_caracteristique_text);
         BoutonCreation = findViewById(R.id.button_creation);
         mParticipants_button = findViewById(R.id.participants_button);
 
@@ -217,7 +215,6 @@ public class addproject extends AppCompatActivity {
                     }
                 }
                 String selectedParticipantsString = selectedFriends.toString();
-                mSelectedCarateristiqueText.setText("Nom du Projet : " + userProjectName +"\n"+ "Date de debut : "+  selectedDateDebut.getTime().toString()  + "\n"+ "Date de fin : "+ selectedDateFin.getTime().toString()  + "\n" +"Participants : " + selectedParticipantsString + "\n" +"Description : " + userDescription);
                 //Creer le projet dans la databse
                 Map<String, Object> projetMap = new HashMap<>();
                 projetMap.put("ID  ", id);

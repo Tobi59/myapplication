@@ -106,13 +106,6 @@
         android:layout_marginEnd="80dp"
         android:text="Creer le projet" />
 
-    <TextView
-        android:id="@+id/selected_caracteristique_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
-        android:text="Caracteristiques du projet :"
-        android:textSize="20sp" />
 
 
 </RelativeLayout>
