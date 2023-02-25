@@ -38,7 +38,7 @@ dependencies {
     //Import google analytics
     implementation 'com.google.firebase:firebase-analytics'
     // Add the dependency for the Realtime Database library
-    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-database:20.0.5'
     //firebase auth
     implementation 'com.google.firebase:firebase-auth'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

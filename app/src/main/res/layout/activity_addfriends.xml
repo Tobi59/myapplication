@@ -21,7 +21,14 @@
 
     </RelativeLayout>
 
-
+<Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="150dp"
+    android:layout_marginLeft="20dp"
+    android:text="Message"
+    android:id="@+id/ButtonMessage"
+    android:backgroundTint="@color/color_back_login"/>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

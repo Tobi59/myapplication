@@ -2,15 +2,13 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -18,6 +16,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class addfriends extends AppCompatActivity {
+
+    Button ButtonMessage;
 
     BottomNavigationView nav;
     //création de l'instance FireBase
@@ -32,6 +32,10 @@ public class addfriends extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         nav=findViewById(R.id.nav);
         nav.setSelectedItemId(R.id.add_friends);
+        //Bouton pour accéder au message
+        ButtonMessage = findViewById(R.id.ButtonMessage);
+
+
         nav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -57,7 +61,18 @@ public class addfriends extends AppCompatActivity {
                 return false;
             }
         });
+
+        ButtonMessage.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), messagerie2.class));
+            }
+        });
+
     }
+
+
+
     public void onStart() {
         super.onStart();
         // vérifie que l'utilisateur n'est pas connecté, mets à jour l'UI si besoin
