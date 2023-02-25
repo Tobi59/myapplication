@@ -51,7 +51,7 @@ public class addfriends extends AppCompatActivity {
                     case R.id.add_friends:
                         return true;
                     case R.id.add_project:
-                        startActivity(new Intent(getApplicationContext(),addfriends.class));
+                        startActivity(new Intent(getApplicationContext(),addproject.class));
                         overridePendingTransition(0,0);
                         return true;
                     default:
