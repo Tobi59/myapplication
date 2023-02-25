@@ -54,7 +54,7 @@ public class welcomeActivity extends AppCompatActivity {
                          overridePendingTransition(0,0);
                          return true;
                     case R.id.add_project:
-                         startActivity(new Intent(getApplicationContext(),addproject.class));
+                         startActivity(new Intent(getApplicationContext(),CreationTachesetProjet.class));
                          overridePendingTransition(0,0);
                          return true;
                     default:

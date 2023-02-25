@@ -15,6 +15,12 @@
             android:name=".ParaMessage"
             android:exported="false" />
         <activity
+            android:name=".CreationTachesetProjet"
+            android:exported="false" />
+        <activity
+            android:name=".addtasks"
+            android:exported="false" />
+        <activity
             android:name=".addfriends"
             android:exported="false" />
         <activity
