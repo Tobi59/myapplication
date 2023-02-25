@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/friends"
     tools:context=".addfriends">
 
     <RelativeLayout
@@ -32,7 +31,19 @@
 
     </RelativeLayout>
 
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
+    <ImageView
+        android:layout_width="370dp"
+        android:layout_height="370dp"
+        android:background="@drawable/friends"
+        android:layout_marginTop="170dp"
+        android:layout_marginLeft="21dp"/>
+
+
+</RelativeLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
