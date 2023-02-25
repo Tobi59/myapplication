@@ -3,24 +3,62 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class addtasks extends AppCompatActivity {
     BottomNavigationView nav;
     //création de l'instance FireBase
     private FirebaseAuth mAuth;
+    private int id;
+    String[] friends = {"Alice", "Bob", "Charlie", "Dave", "Eve", "Frank"};
+    private ListView mFriendsListView;
+    private ArrayAdapter<String> mFriendsAdapter;
+    private Button BoutonCreation;
+    private Button mParticipants_button;
+    private String selectedDateStringFin;
+    private String selectedDateStringDebut;
+
+    private static final String TAG = "AddTachesActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addtasks);
+        //Initialisation de la Firebase pour Taches
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference projetsRef = db.collection("Taches");
 
+        //Systeme de navigation entre les pages
         mAuth = FirebaseAuth.getInstance();
         nav=findViewById(R.id.nav);
         nav.setSelectedItemId(R.id.add_project);
@@ -49,8 +87,140 @@ public class addtasks extends AppCompatActivity {
                 return false;
             }
         });
+        //Recuperer le nom du projet
+        TextInputLayout textProjectName = findViewById(R.id.Project_Name);
+        TextInputEditText textProjectNameEditText = (TextInputEditText) textProjectName.getEditText();
+        //Description
+        TextInputLayout textDescription = findViewById(R.id.Description);
+        TextInputEditText textDescriptionEditText = (TextInputEditText) textDescription.getEditText();
+
+        //Systeme de Participants
+        mFriendsListView = findViewById(R.id.friends_listview);
+        mFriendsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, friends);
+        mFriendsListView.setAdapter(mFriendsAdapter);
+        mFriendsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        //la date de debut
+        Button Datededebut =findViewById(R.id.Datededebut);
+        final Context context = this;
+        final Calendar selectedDateDebut = Calendar.getInstance();
+
+        Datededebut.setOnClickListener(new View.OnClickListener() {
+           @Override
+            public void onClick(View v) {
+                // Obtenez la date actuelle
+                final Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+                // Affichez un calendrier DatePickerDialog pour permettre à l'utilisateur de sélectionner une date
+                DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        // Mettez à jour votre variable avec la date sélectionnée par l'utilisateur
+                        selectedDateDebut.set(Calendar.YEAR, year);
+                        selectedDateDebut.set(Calendar.MONTH, month);
+                        selectedDateDebut.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        Date DateChoisieDebut = selectedDateDebut.getTime();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        selectedDateStringDebut = dateFormat.format(DateChoisieDebut);
+
+                    }
+                }, year, month, dayOfMonth);
+                datePickerDialog.show();
+            }
+        });
+        //la date de fin
+        Button Datedefin = findViewById(R.id.Datedefin);
+        final Calendar selectedDateFin = Calendar.getInstance();
+
+        Datedefin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Obtenez la date actuelle
+                final Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+                // Affichez un calendrier DatePickerDialog pour permettre à l'utilisateur de sélectionner une date
+                DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        // Mettez à jour votre variable avec la date sélectionnée par l'utilisateur
+                        selectedDateFin.set(Calendar.YEAR, year);
+                        selectedDateFin.set(Calendar.MONTH, month);
+                        selectedDateFin.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        Date DateChoisieFin = selectedDateFin.getTime();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        selectedDateStringFin = dateFormat.format(DateChoisieFin);
+
+                    }
+                }, year, month, dayOfMonth);
+                datePickerDialog.show();
+            }
+        });
+        mParticipants_button = findViewById(R.id.participants_button);
+        mParticipants_button.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mFriendsListView.getVisibility() == View.GONE) {
+                    mFriendsListView.setVisibility(View.VISIBLE);
+                } else {
+                    mFriendsListView.setVisibility(View.GONE);
+                }
+            }
+        }));
+        BoutonCreation = findViewById(R.id.button_creation);
+        BoutonCreation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> selectedFriends = new ArrayList<>();
+                for (int i = 0; i < mFriendsAdapter.getCount(); i++) {
+                    if (mFriendsListView.isItemChecked(i)) {
+                        selectedFriends.add(mFriendsAdapter.getItem(i));
+                    }
+                }
+                String selectedParticipantsString = selectedFriends.toString();
+                //Creer le projet dans la databse
+                Map<String, Object> projetMap = new HashMap<>();
+                projetMap.put("ID  ", id);
+                projetMap.put("Nom ", textProjectNameEditText.getText().toString());
+                projetMap.put("Description ", textDescriptionEditText.getText().toString());
+                projetMap.put("Date de Debut ", selectedDateStringDebut );
+                projetMap.put("Date de Fin ", selectedDateStringFin );
+                projetMap.put("Participants ",selectedParticipantsString);
+
+                projetsRef.add(projetMap)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d(TAG, "Projet ajouté avec l'ID : " + documentReference.getId());
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Erreur lors de l'ajout du projet", e);
+                            }
+                        });
+            }
 
 
 
+        });
+
+
+
+
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // vérifie que l'utilisateur n'est pas connecté, mets à jour l'UI si besoin
+        FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
+        if(currentUser==null){
+            startActivity(new Intent(getApplicationContext(),register.class));
+        }
     }
 }
