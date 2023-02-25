@@ -6,44 +6,56 @@
     android:layout_height="match_parent"
     tools:context=".addfriends">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/addMail"
+        android:layout_width="287dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/custome_edittext"
+        android:hint="mail de l'ami"
+        app:iconifiedByDefault="false"
+        app:queryHint="Add here..." />
 
-        <androidx.appcompat.widget.SearchView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/search"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/custome_edittext"
-            app:queryHint="Search here..."
-            app:iconifiedByDefault="false"/>
+    <EditText
+        android:id="@+id/addID"
+        android:layout_width="310dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/addMail"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/custome_edittext"
+        android:hint="ID"
+        app:iconifiedByDefault="false"
+        app:queryHint="Add here..." />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_marginLeft="280dp"
-            android:layout_marginTop="10dp"
-            android:text="Add"
-            android:textStyle="bold"
-            android:textSize="10sp"
-            android:backgroundTint="@color/color_back_login"/>
+    <Button
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_below="@+id/addID"
+        android:layout_marginLeft="280dp"
+        android:layout_marginTop="44dp"
+        android:backgroundTint="@color/color_back_login"
+        android:text="Add"
+        android:textSize="10sp"
+        android:textStyle="bold" />
 
-    </RelativeLayout>
-
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
     <ImageView
         android:layout_width="370dp"
         android:layout_height="370dp"
-        android:background="@drawable/friends"
-        android:layout_marginTop="170dp"
-        android:layout_marginLeft="21dp"/>
-
-
-</RelativeLayout>
+        android:layout_below="@+id/addID"
+        android:layout_marginLeft="21dp"
+        android:layout_marginTop="106dp"
+        android:background="@drawable/friends" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
