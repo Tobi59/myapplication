@@ -16,7 +16,8 @@
         android:text="GestPro"
         android:textColor="@color/color_back_login"
         android:textSize="40sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"/>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:id="@+id/nav"
@@ -48,7 +49,7 @@
             android:textStyle="bold"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="40dp"
@@ -63,11 +64,12 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Création d'une application"
                 android:textColor="@color/black"
-                android:translationY="10dp" />
+                android:translationY="10dp"
+                android:layout_marginLeft="10dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -76,7 +78,8 @@
                 android:textColor="@color/color_back_login"
                 android:textStyle="bold"
                 android:translationX="130dp"
-                android:translationY="-10dp" />
+                android:translationY="-10dp"
+                android:layout_marginRight="20dp"/>
 
         </LinearLayout>
     </RelativeLayout>
@@ -95,6 +98,32 @@
             android:layout_marginTop="200dp"
             android:textStyle="bold"
             android:fontFamily="@font/lhandw"/>
+
+            <LinearLayout
+                android:layout_width="256dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="240dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/custome_edittext"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Nom prénom"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/black"
+                    android:translationY="10dp" />
+
+            </LinearLayout>
+
 
         </RelativeLayout>
 </RelativeLayout>
