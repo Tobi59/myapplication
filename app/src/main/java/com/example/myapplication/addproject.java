@@ -99,6 +99,10 @@ public class addproject extends AppCompatActivity {
     private TextView mSelectedCarateristiqueText;
     private Button mParticipants_button;
 
+    //Variable lié au Date
+    private String selectedDateStringFin;
+    private String selectedDateStringDebut;
+
     //private Context context;
     private static final String TAG = "AddProjectActivity";
 
@@ -144,8 +148,7 @@ public class addproject extends AppCompatActivity {
                         selectedDateDebut.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                         Date DateChoisieDebut = selectedDateDebut.getTime();
                         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                        String selectedDateString = dateFormat.format(DateChoisieDebut);
-                        String DateDebut = selectedDateString;
+                        selectedDateStringDebut = dateFormat.format(DateChoisieDebut);
 
                     }
                 }, year, month, dayOfMonth);
@@ -175,8 +178,7 @@ public class addproject extends AppCompatActivity {
                         selectedDateFin.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                         Date DateChoisieFin = selectedDateFin.getTime();
                         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                        String selectedDateString = dateFormat.format(DateChoisieFin);
-                        String DateFin = selectedDateString;
+                        selectedDateStringFin = dateFormat.format(DateChoisieFin);
 
                     }
                 }, year, month, dayOfMonth);
@@ -218,12 +220,12 @@ public class addproject extends AppCompatActivity {
                 mSelectedCarateristiqueText.setText("Nom du Projet : " + userProjectName +"\n"+ "Date de debut : "+  selectedDateDebut.getTime().toString()  + "\n"+ "Date de fin : "+ selectedDateFin.getTime().toString()  + "\n" +"Participants : " + selectedParticipantsString + "\n" +"Description : " + userDescription);
                 //Creer le projet dans la databse
                 Map<String, Object> projetMap = new HashMap<>();
-                projetMap.put("ID : ", id);
-                projetMap.put("Nom :", textProjectNameEditText.getText().toString());
-                projetMap.put("Description :", textDescriptionEditText.getText().toString());
-                projetMap.put("Date de Debut :", selectedDateDebut.getTime().toString() );
-                projetMap.put("Date de Fin :", selectedDateFin.getTime().toString() );
-                projetMap.put("Participants :",selectedParticipantsString);
+                projetMap.put("ID  ", id);
+                projetMap.put("Nom ", textProjectNameEditText.getText().toString());
+                projetMap.put("Description ", textDescriptionEditText.getText().toString());
+                projetMap.put("Date de Debut ", selectedDateStringDebut );
+                projetMap.put("Date de Fin ", selectedDateStringFin );
+                projetMap.put("Participants ",selectedParticipantsString);
 
                 projetsRef.add(projetMap)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

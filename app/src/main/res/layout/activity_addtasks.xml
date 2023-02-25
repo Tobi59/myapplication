@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    tools:context=".addproject">
-
+    tools:context=".addtasks">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav"
@@ -21,6 +20,20 @@
         tools:layout_editor_absoluteY="677dp" />
 
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/Project_Name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nom de la tache" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
         android:id="@+id/Datededebut"
         android:layout_width="wrap_content"
@@ -33,7 +46,6 @@
         android:text=" Date de debut"
         />
 
-
     <Button
         android:id="@+id/Datedefin"
         android:layout_width="180dp"
@@ -45,35 +57,6 @@
         android:layout_marginBottom="10dp"
         android:ems="10"
         android:text="Date de fin" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/Project_Name"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp">
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nom du Projet" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/Description"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="170dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Description du projet" />
-
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/participants_button"
@@ -95,6 +78,21 @@
         android:visibility="gone"
         />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/Description"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="170dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description de la tache" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
         android:id="@+id/button_creation"
         android:layout_width="wrap_content"
@@ -104,20 +102,8 @@
         android:layout_marginStart="80dp"
         android:layout_marginTop="575dp"
         android:layout_marginEnd="80dp"
-        android:text="Creer le projet" />
-
-    <TextView
-        android:id="@+id/selected_caracteristique_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
-        android:text="Caracteristiques du projet :"
-        android:textSize="20sp" />
+        android:text="Ajouter la tache" />
 
 
 </RelativeLayout>
-
-
-
-
 
