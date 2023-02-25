@@ -31,11 +31,18 @@
         tools:layout_editor_absoluteY="677dp"
         tools:ignore="MissingConstraints" />
 
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/welcome_fond"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="100dp"/>
+
     <RelativeLayout
         tools:context=".welcomeActivity"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="280dp"
         android:layout_marginRight="30dp"
         android:layout_marginLeft="30dp">
 
