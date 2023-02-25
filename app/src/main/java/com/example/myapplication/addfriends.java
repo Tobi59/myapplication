@@ -32,8 +32,7 @@ public class addfriends extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         nav=findViewById(R.id.nav);
         nav.setSelectedItemId(R.id.add_friends);
-        //Bouton pour accéder au message
-        ButtonMessage = findViewById(R.id.ButtonMessage);
+
 
 
         nav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -62,12 +61,7 @@ public class addfriends extends AppCompatActivity {
             }
         });
 
-        ButtonMessage.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), messagerie2.class));
-            }
-        });
+
 
     }
 
