@@ -16,8 +16,10 @@ import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -26,14 +28,21 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 public class addtasks extends AppCompatActivity {
     BottomNavigationView nav;
@@ -48,6 +57,25 @@ public class addtasks extends AppCompatActivity {
     private String selectedDateStringFin;
     private String selectedDateStringDebut;
 
+    //Variable Status
+    String[] status = {"Non commencé","En cours", "Fini"};
+    private ListView mStatusListView;
+    private ArrayAdapter<String> mStatusAdapter;
+    private Button mStatus_button;
+    private String selectedStatus;
+
+    //Variable Projet
+
+    private ListView mProjetListView;
+    private ArrayAdapter<String> mProjetAdapter;
+    private Button mProjet_button;
+    List<String> Nomdeprojet = new ArrayList<>();
+    private String selectedProjet;
+    String projetId;
+    String tacheId;
+    DocumentReference projetRefmaj;
+
+
     private static final String TAG = "AddTachesActivity";
 
     @Override
@@ -56,7 +84,7 @@ public class addtasks extends AppCompatActivity {
         setContentView(R.layout.activity_addtasks);
         //Initialisation de la Firebase pour Taches
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference projetsRef = db.collection("Taches");
+        CollectionReference TachesRef = db.collection("Taches");
 
         //Systeme de navigation entre les pages
         mAuth = FirebaseAuth.getInstance();
@@ -89,18 +117,60 @@ public class addtasks extends AppCompatActivity {
                 return false;
             }
         });
-        //Recuperer le nom du projet
-        TextInputLayout textProjectName = findViewById(R.id.Project_Name);
-        TextInputEditText textProjectNameEditText = (TextInputEditText) textProjectName.getEditText();
+        //Code lié a la recuperation des projets existants pour le choix du projet
+        CollectionReference projetsRef = db.collection("Projets");
+
+        // Récupérez tous les documents de la collection de "projets"
+        projetsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                // Parcourez tous les documents dans le QuerySnapshot
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    // Vérifiez si le document existe
+                    if (documentSnapshot.exists()) {
+                        // Récupérez la valeur du champ "Nomp" pour chaque document
+                        String Nom = documentSnapshot.getString("Nom ");
+
+                        // Ajoutez la valeur du champ à la liste
+                        Nomdeprojet.add(Nom);
+                        Log.d(TAG, "Nom du projet : " + Nom);
+                    } else {
+                        Log.d(TAG, "Aucun document trouvé pour cet ID");
+                    }
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Erreur lors de la récupération des documents", e);
+            }
+        });
+
+
+        //Recuperer le nom de la tache
+        TextInputLayout textTacheName = findViewById(R.id.Tache_Nom);
+        TextInputEditText textTacheNameEditText = (TextInputEditText) textTacheName.getEditText();
         //Description
         TextInputLayout textDescription = findViewById(R.id.Description);
         TextInputEditText textDescriptionEditText = (TextInputEditText) textDescription.getEditText();
+        //Systeme de Choix de projets
+        mProjetListView = findViewById(R.id.choixprojet_listview);
+        mProjetAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, Nomdeprojet);
+        mProjetListView.setAdapter(mProjetAdapter);
+        mProjetListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         //Systeme de Participants
         mFriendsListView = findViewById(R.id.friends_listview);
         mFriendsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, friends);
         mFriendsListView.setAdapter(mFriendsAdapter);
         mFriendsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        //Systeme de Status
+        mStatusListView = findViewById(R.id.status_listview);
+        mStatusAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, status);
+        mStatusListView.setAdapter(mStatusAdapter);
+        mStatusListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
         //la date de debut
         Button Datededebut =findViewById(R.id.Datededebut);
         final Context context = this;
@@ -162,6 +232,19 @@ public class addtasks extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+        //Visibilité de la liste quand on appuie sur Choix du Projet
+        mProjet_button = findViewById(R.id.choixprojet_button);
+        mProjet_button.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mProjetListView.getVisibility() == View.GONE) {
+                    mProjetListView.setVisibility(View.VISIBLE);
+                } else {
+                    mProjetListView.setVisibility(View.GONE);
+                }
+            }
+        }));
+        //Visibilité de la liste quand on appuie sur Selectionnez les participants
         mParticipants_button = findViewById(R.id.participants_button);
         mParticipants_button.setOnClickListener((new View.OnClickListener() {
             @Override
@@ -173,10 +256,54 @@ public class addtasks extends AppCompatActivity {
                 }
             }
         }));
+        //Visibilité de la liste quand on appuie sur Status
+        mStatus_button = findViewById(R.id.status_button);
+        mStatus_button.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mStatusListView.getVisibility() == View.GONE) {
+                    mStatusListView.setVisibility(View.VISIBLE);
+                } else {
+                    mStatusListView.setVisibility(View.GONE);
+                }
+            }
+        }));
         BoutonCreation = findViewById(R.id.button_creation);
         BoutonCreation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                for (int i = 0; i < mProjetAdapter.getCount(); i++) {
+                    if (mProjetListView.isItemChecked(i)) {
+                        selectedProjet = mProjetAdapter.getItem(i);
+                    }
+                }
+                String nomProjet = selectedProjet;
+                Log.d(TAG, "Le nom du projet est : "+ nomProjet );
+                Query query = projetsRef.whereEqualTo("Nom ", nomProjet).limit(1);
+                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot querySnapshot = task.getResult();
+                            if (!querySnapshot.isEmpty()) {
+                                DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                                projetId = documentSnapshot.getId();
+                                Log.d(TAG, "ID du projet " + nomProjet + " : " + projetId);
+                            } else {
+                                Log.d(TAG, "Aucun document trouvé pour ce nom de projet");
+                            }
+                        } else {
+                            Log.d(TAG, "Erreur : ", task.getException());
+                        }
+                    }
+                });
+
+
+                for (int i = 0; i < mStatusAdapter.getCount(); i++) {
+                    if (mStatusListView.isItemChecked(i)) {
+                        selectedStatus = mStatusAdapter.getItem(i);
+                    }
+                }
                 ArrayList<String> selectedFriends = new ArrayList<>();
                 for (int i = 0; i < mFriendsAdapter.getCount(); i++) {
                     if (mFriendsListView.isItemChecked(i)) {
@@ -184,28 +311,55 @@ public class addtasks extends AppCompatActivity {
                     }
                 }
                 String selectedParticipantsString = selectedFriends.toString();
-                //Creer le projet dans la databse
-                Map<String, Object> projetMap = new HashMap<>();
-                projetMap.put("ID  ", id);
-                projetMap.put("Nom ", textProjectNameEditText.getText().toString());
-                projetMap.put("Description ", textDescriptionEditText.getText().toString());
-                projetMap.put("Date de Debut ", selectedDateStringDebut );
-                projetMap.put("Date de Fin ", selectedDateStringFin );
-                projetMap.put("Participants ",selectedParticipantsString);
+                //Creer la tache dans la databse
+                Map<String, Object> TacheMap = new HashMap<>();
+                TacheMap.put("ID  ", id);
+                TacheMap.put("Nom ", textTacheNameEditText.getText().toString());
+                TacheMap.put("Description ", textDescriptionEditText.getText().toString());
+                TacheMap.put("Date de Debut ", selectedDateStringDebut );
+                TacheMap.put("Date de Fin ", selectedDateStringFin );
+                TacheMap.put("Status ", selectedStatus );
+                TacheMap.put("Participants ",selectedParticipantsString);
 
-                projetsRef.add(projetMap)
+                TachesRef.add(TacheMap)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "Projet ajouté avec l'ID : " + documentReference.getId());
+                                Log.d(TAG, "Tache ajouté avec l'ID : " + documentReference.getId());
+                                tacheId = documentReference.getId();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Erreur lors de l'ajout du projet", e);
+                                Log.w(TAG, "Erreur lors de l'ajout de la tache", e);
                             }
                         });
+                //Ajout de l'ID de la tache dans le projet
+
+                projetRefmaj = db.collection("Projets").document(String.valueOf(projetId));
+                List<String> TachesId = new ArrayList<String>();
+                String Taches = "Taches";
+                TachesId.add(tacheId);
+                projetRefmaj.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        // Le document existe déjà, récupérer les ID existantes ou  créer ID s'il n'existe pas encore
+                        List<String> TachesIdExistantes = (List<String>) document.get(Taches);
+                        if (TachesIdExistantes == null) {
+                            TachesIdExistantes = new ArrayList<>();
+                        }
+                        TachesIdExistantes.addAll(TachesId);
+                        projetRefmaj.update(Taches, TachesIdExistantes)
+                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Champ " + Taches + " mis à jour avec succès!"))
+                                .addOnFailureListener(e -> Log.w(TAG, "Erreur lors de la mise à jour du champ " + Taches, e));
+                    }
+                    else {
+                        Log.w(TAG, "Erreur lors de la récupération du document", task.getException());
+                    }
+                });
+
+
             }
 
 
