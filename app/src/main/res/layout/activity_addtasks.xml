@@ -43,6 +43,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="70dp"
         android:ems="10"
+        android:backgroundTint="@color/color_back_login"
         android:text=" Date de debut"
         />
 
@@ -56,6 +57,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:ems="10"
+        android:backgroundTint="@color/color_back_login"
         android:text="Date de fin" />
 
     <Button
@@ -81,7 +83,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/Description"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="223dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="170dp">
 
@@ -102,7 +104,16 @@
         android:layout_marginStart="80dp"
         android:layout_marginTop="575dp"
         android:layout_marginEnd="80dp"
+        android:backgroundTint="@color/color_back_login"
         android:text="Ajouter la tache" />
+
+    <RelativeLayout
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:background="@drawable/addprojecttash"
+        android:layout_marginTop="400dp"
+        android:layout_marginLeft="120dp"/>
+
 
 
 </RelativeLayout>

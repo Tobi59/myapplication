@@ -32,7 +32,7 @@
         android:layout_marginEnd="70dp"
         android:background="@drawable/custome_edittext"
         android:drawablePadding="8dp"
-        android:hint="new mail"
+        android:hint="New mail"
         android:inputType="text"
         android:padding="8dp"
         android:textColor="@color/color_back_login" />
@@ -63,7 +63,7 @@
         android:layout_marginEnd="70dp"
         android:background="@drawable/custome_edittext"
         android:drawablePadding="8dp"
-        android:hint="new mdp"
+        android:hint="New mdp"
         android:inputType="text"
         android:padding="8dp"
         android:textColor="@color/color_back_login" />
@@ -94,7 +94,7 @@
         android:layout_marginEnd="70dp"
         android:background="@drawable/custome_edittext"
         android:drawablePadding="8dp"
-        android:hint="new username"
+        android:hint="New username"
         android:inputType="text"
         android:padding="8dp"
         android:textColor="@color/color_back_login" />
