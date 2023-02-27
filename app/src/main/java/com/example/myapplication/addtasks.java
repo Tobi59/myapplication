@@ -38,6 +38,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -120,7 +121,10 @@ public class addtasks extends AppCompatActivity {
         //Code lié a la recuperation des projets existants pour le choix du projet
         CollectionReference projetsRef = db.collection("Projets");
 
-        // Récupérez tous les documents de la collection de "projets"
+        // Créer une HashMap pour stocker les projets
+        HashMap<String, String> projetsMap = new HashMap<>();
+
+// Récupérez tous les documents de la collection "Projets"
         projetsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -128,12 +132,14 @@ public class addtasks extends AppCompatActivity {
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     // Vérifiez si le document existe
                     if (documentSnapshot.exists()) {
-                        // Récupérez la valeur du champ "Nomp" pour chaque document
-                        String Nom = documentSnapshot.getString("Nom ");
-
-                        // Ajoutez la valeur du champ à la liste
-                        Nomdeprojet.add(Nom);
-                        Log.d(TAG, "Nom du projet : " + Nom);
+                        // Récupérez l'ID du projet
+                        String id = documentSnapshot.getId();
+                        // Récupérez la valeur du champ "Nom" pour chaque document
+                        String nom = documentSnapshot.getString("Nom ");
+                        Nomdeprojet.add(nom);
+                        // Ajouter l'ID et le nom du projet à la HashMap
+                        projetsMap.put(id, nom);
+                        Log.d(TAG, "ID du projet : " + id + ", Nom du projet : " + nom);
                     } else {
                         Log.d(TAG, "Aucun document trouvé pour cet ID");
                     }
@@ -145,6 +151,7 @@ public class addtasks extends AppCompatActivity {
                 Log.w(TAG, "Erreur lors de la récupération des documents", e);
             }
         });
+
 
 
         //Recuperer le nom de la tache
@@ -279,24 +286,23 @@ public class addtasks extends AppCompatActivity {
                 }
                 String nomProjet = selectedProjet;
                 Log.d(TAG, "Le nom du projet est : "+ nomProjet );
-                Query query = projetsRef.whereEqualTo("Nom ", nomProjet).limit(1);
-                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot querySnapshot = task.getResult();
-                            if (!querySnapshot.isEmpty()) {
-                                DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
-                                projetId = documentSnapshot.getId();
-                                Log.d(TAG, "ID du projet " + nomProjet + " : " + projetId);
-                            } else {
-                                Log.d(TAG, "Aucun document trouvé pour ce nom de projet");
-                            }
-                        } else {
-                            Log.d(TAG, "Erreur : ", task.getException());
-                        }
+                // Récupérez l'ID d'un projet à partir de son nom
+
+                for (Map.Entry<String, String> entry : projetsMap.entrySet()) {
+                    String idDuProjet = entry.getKey();
+                    String nomDuProjet = entry.getValue();
+                    if (nomDuProjet.equals(nomProjet)) {
+                        projetId = idDuProjet;
+                        break;
                     }
-                });
+                }
+
+                if (projetId == null) {
+                    Log.d(TAG, "Aucun projet trouvé avec le nom : " + nomProjet);
+                } else {
+                    Log.d(TAG, "ID du projet recherché : " + projetId);
+                }
+
 
 
                 for (int i = 0; i < mStatusAdapter.getCount(); i++) {
@@ -313,7 +319,6 @@ public class addtasks extends AppCompatActivity {
                 String selectedParticipantsString = selectedFriends.toString();
                 //Creer la tache dans la databse
                 Map<String, Object> TacheMap = new HashMap<>();
-                TacheMap.put("ID  ", id);
                 TacheMap.put("Nom ", textTacheNameEditText.getText().toString());
                 TacheMap.put("Description ", textDescriptionEditText.getText().toString());
                 TacheMap.put("Date de Debut ", selectedDateStringDebut );
@@ -327,6 +332,29 @@ public class addtasks extends AppCompatActivity {
                             public void onSuccess(DocumentReference documentReference) {
                                 Log.d(TAG, "Tache ajouté avec l'ID : " + documentReference.getId());
                                 tacheId = documentReference.getId();
+                                projetRefmaj = db.collection("Projets").document(String.valueOf(projetId));
+                                List<String> TachesId = new ArrayList<String>();
+                                String Taches = "Taches";
+                                TachesId.add(tacheId);
+
+                                projetRefmaj.get().addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        // Le document existe déjà, récupérer les ID existantes ou  créer ID s'il n'existe pas encore
+                                        List<String> TachesIdExistantes = (List<String>) document.get(Taches);
+                                        if (TachesIdExistantes == null) {
+                                            TachesIdExistantes = new ArrayList<>();
+                                        }
+                                        TachesIdExistantes.removeAll(Collections.singleton(null));
+                                        TachesIdExistantes.addAll(TachesId);
+                                        projetRefmaj.update(Taches, TachesIdExistantes)
+                                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Champ " + Taches + " mis à jour avec succès!"))
+                                                .addOnFailureListener(e -> Log.w(TAG, "Erreur lors de la mise à jour du champ " + Taches, e));
+                                    }
+                                    else {
+                                        Log.w(TAG, "Erreur lors de la récupération du document", task.getException());
+                                    }
+                                });
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -337,27 +365,7 @@ public class addtasks extends AppCompatActivity {
                         });
                 //Ajout de l'ID de la tache dans le projet
 
-                projetRefmaj = db.collection("Projets").document(String.valueOf(projetId));
-                List<String> TachesId = new ArrayList<String>();
-                String Taches = "Taches";
-                TachesId.add(tacheId);
-                projetRefmaj.get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        // Le document existe déjà, récupérer les ID existantes ou  créer ID s'il n'existe pas encore
-                        List<String> TachesIdExistantes = (List<String>) document.get(Taches);
-                        if (TachesIdExistantes == null) {
-                            TachesIdExistantes = new ArrayList<>();
-                        }
-                        TachesIdExistantes.addAll(TachesId);
-                        projetRefmaj.update(Taches, TachesIdExistantes)
-                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Champ " + Taches + " mis à jour avec succès!"))
-                                .addOnFailureListener(e -> Log.w(TAG, "Erreur lors de la mise à jour du champ " + Taches, e));
-                    }
-                    else {
-                        Log.w(TAG, "Erreur lors de la récupération du document", task.getException());
-                    }
-                });
+
 
 
             }
