@@ -27,6 +27,7 @@ import java.util.Map;
 
 public class welcomeActivity extends AppCompatActivity {
     BottomNavigationView nav;
+    Button mphoto;
     //création de l'instance FireBase
     private FirebaseAuth mAuth;
     @SuppressLint("MissingInflatedId")
@@ -38,6 +39,7 @@ public class welcomeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         nav=findViewById(R.id.nav);
         nav.setSelectedItemId(R.id.home);
+        mphoto = findViewById(R.id.photo);
         nav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -61,6 +63,12 @@ public class welcomeActivity extends AppCompatActivity {
                     }
                     //le return false devrait pas être dans le default ?
                     return false;
+            }
+        });
+        mphoto.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),PhotoMain.class));
             }
         });
     }
@@ -90,4 +98,5 @@ public class welcomeActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(),register.class));
         }
     }
+
 }
