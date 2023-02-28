@@ -11,5 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:id="@+id/nav"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/menu_nav"
+        app:itemTextColor="@drawable/color_change"
+        app:itemIconTint="@drawable/color_change"
+        android:background="@drawable/shape"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="677dp"
+        tools:ignore="MissingConstraints" />
+
 
 </RelativeLayout>

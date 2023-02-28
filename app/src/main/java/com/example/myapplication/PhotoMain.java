@@ -1,10 +1,14 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 
 import com.android.volley.Request;
@@ -13,6 +17,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +33,10 @@ public class PhotoMain extends AppCompatActivity {
     private ArrayList<exempleItemHTTP> mExampleList;
     private RequestQueue mResquestQueue;
 
+    BottomNavigationView nav;
 
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +45,40 @@ public class PhotoMain extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        nav = findViewById(R.id.nav);
+        nav.setSelectedItemId(R.id.home);
         mExampleList = new ArrayList<>();
 
         mResquestQueue = Volley.newRequestQueue(this);
         parseJSON();
+
+        nav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case R.id.home:
+                        startActivity(new Intent(getApplicationContext(),welcomeActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.settings:
+                        startActivity(new Intent(getApplicationContext(),settings.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.add_friends:
+                        startActivity(new Intent(getApplicationContext(),addfriends.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.add_project:
+                        startActivity(new Intent(getApplicationContext(),CreationTachesetProjet.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    default:
+                }
+                //le return false devrait pas être dans le default ?
+                return false;
+            }
+        });
     }
 
     private void parseJSON(){
