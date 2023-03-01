@@ -140,6 +140,11 @@ public class addfriends extends AppCompatActivity {
     public void addFriendsVerif2(String ID){
         FirebaseUser currentUser = mAuth.getCurrentUser(); // récupère les infos de l'utilisateur actuel
         String uid = currentUser.getUid(); // récupère l'ID de l'utilisateur actuel
+        if(ID.equals(uid)){
+            Toast.makeText(addfriends.this, "Vous ne pouvez pas vous ajouter en ami",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
         DatabaseReference ref = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app")
                 .getReference("users")
                 .child(uid)
