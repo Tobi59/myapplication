@@ -75,6 +75,7 @@ public class addtasks extends AppCompatActivity {
     String projetId;
     String tacheId;
     DocumentReference projetRefmaj;
+    DocumentReference tacheRefmaj;
 
 
     private static final String TAG = "AddTachesActivity";
@@ -135,7 +136,7 @@ public class addtasks extends AppCompatActivity {
                         // Récupérez l'ID du projet
                         String id = documentSnapshot.getId();
                         // Récupérez la valeur du champ "Nom" pour chaque document
-                        String nom = documentSnapshot.getString("Nom ");
+                        String nom = documentSnapshot.getString("Nom");
                         Nomdeprojet.add(nom);
                         // Ajouter l'ID et le nom du projet à la HashMap
                         projetsMap.put(id, nom);
@@ -157,6 +158,7 @@ public class addtasks extends AppCompatActivity {
         //Recuperer le nom de la tache
         TextInputLayout textTacheName = findViewById(R.id.Tache_Nom);
         TextInputEditText textTacheNameEditText = (TextInputEditText) textTacheName.getEditText();
+        Log.d(TAG, "nom de tache : "+ textTacheNameEditText);
         //Description
         TextInputLayout textDescription = findViewById(R.id.Description);
         TextInputEditText textDescriptionEditText = (TextInputEditText) textDescription.getEditText();
@@ -319,12 +321,13 @@ public class addtasks extends AppCompatActivity {
                 String selectedParticipantsString = selectedFriends.toString();
                 //Creer la tache dans la databse
                 Map<String, Object> TacheMap = new HashMap<>();
-                TacheMap.put("Nom ", textTacheNameEditText.getText().toString());
-                TacheMap.put("Description ", textDescriptionEditText.getText().toString());
-                TacheMap.put("Date de Debut ", selectedDateStringDebut );
-                TacheMap.put("Date de Fin ", selectedDateStringFin );
-                TacheMap.put("Status ", selectedStatus );
-                TacheMap.put("Participants ",selectedParticipantsString);
+                TacheMap.put("id", id);
+                TacheMap.put("Nom", textTacheNameEditText.getText().toString());
+                TacheMap.put("Description", textDescriptionEditText.getText().toString());
+                TacheMap.put("DatedeDebut", selectedDateStringDebut );
+                TacheMap.put("DatedeFin ", selectedDateStringFin );
+                TacheMap.put("Status", selectedStatus );
+                TacheMap.put("Participants",selectedParticipantsString);
 
                 TachesRef.add(TacheMap)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -336,6 +339,20 @@ public class addtasks extends AppCompatActivity {
                                 List<String> TachesId = new ArrayList<String>();
                                 String Taches = "Taches";
                                 TachesId.add(tacheId);
+                                //ajout de l'id dans tache
+                                tacheRefmaj = db.collection("Taches").document(String.valueOf(tacheId));
+                                String id = "id";
+                                tacheRefmaj.get().addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        tacheRefmaj.update(id, tacheId)
+                                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Champ " + id + " mis à jour avec succès!"))
+                                                .addOnFailureListener(e -> Log.w(TAG, "Erreur lors de la mise à jour du champ " + id, e));
+                                    }
+                                    else {
+                                        Log.w(TAG, "Erreur lors de la récupération du document", task.getException());
+                                    }
+                                });
 
                                 projetRefmaj.get().addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {

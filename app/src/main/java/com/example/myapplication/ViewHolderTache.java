@@ -6,15 +6,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ViewHolderProjet extends RecyclerView.ViewHolder {
 
-    TextView NomProjet,Voirplus;
+public class ViewHolderTache extends RecyclerView.ViewHolder {
+    TextView NomTache,Voirplus;
 
 
-    public ViewHolderProjet(@NonNull View itemView) {
+    public ViewHolderTache(@NonNull View itemView) {
         super(itemView);
-        NomProjet = itemView.findViewById(R.id.Nomprojet);
+        NomTache = itemView.findViewById(R.id.Nomtache);
         Voirplus = itemView.findViewById(R.id.Voirplus);
     }
 
 }
+
