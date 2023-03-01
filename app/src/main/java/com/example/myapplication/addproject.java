@@ -38,6 +38,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
@@ -112,6 +113,9 @@ public class addproject extends AppCompatActivity {
 
     //private Context context;
     private static final String TAG = "AddProjectActivity";
+    String projetId;
+    DocumentReference projetRefmaj;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -258,18 +262,32 @@ public class addproject extends AppCompatActivity {
                 String selectedParticipantsString = selectedFriends.toString();
                 //Creer le projet dans la databse
                 Map<String, Object> projetMap = new HashMap<>();
-                projetMap.put("ID  ", id);
-                projetMap.put("Nom ", textProjectNameEditText.getText().toString());
-                projetMap.put("Description ", textDescriptionEditText.getText().toString());
-                projetMap.put("Date de Debut ", selectedDateStringDebut );
-                projetMap.put("Date de Fin ", selectedDateStringFin );
-                projetMap.put("Participants ",selectedParticipantsString);
+                projetMap.put("id", id);
+                projetMap.put("Nom", textProjectNameEditText.getText().toString());
+                projetMap.put("Description", textDescriptionEditText.getText().toString());
+                projetMap.put("Date de Debut", selectedDateStringDebut );
+                projetMap.put("Date de Fin", selectedDateStringFin );
+                projetMap.put("Participants",selectedParticipantsString);
 
                 projetsRef.add(projetMap)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Log.d(TAG, "Projet ajouté avec l'ID : " + documentReference.getId());
+                                projetId = documentReference.getId();
+                                projetRefmaj = db.collection("Projets").document(String.valueOf(projetId));
+                                String id = "id";
+                                projetRefmaj.get().addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        projetRefmaj.update(id, projetId)
+                                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Champ " + id + " mis à jour avec succès!"))
+                                                .addOnFailureListener(e -> Log.w(TAG, "Erreur lors de la mise à jour du champ " + id, e));
+                                    }
+                                    else {
+                                        Log.w(TAG, "Erreur lors de la récupération du document", task.getException());
+                                    }
+                                });
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -279,6 +297,7 @@ public class addproject extends AppCompatActivity {
                             }
                         });
             }
+
 
 
 
