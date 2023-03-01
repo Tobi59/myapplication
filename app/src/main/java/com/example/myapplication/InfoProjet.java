@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.text.IDNA;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,27 +70,29 @@ public class InfoProjet extends AppCompatActivity {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             @Override
             public void onClick(View view) {
-                for (int i=0; i < listetaches.size();i++){
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    db.collection("Taches").document(listetaches.get(i))
-                            .delete()
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "Projet supprimé avec succès !");
-                                    startActivity(new Intent(getApplicationContext(), welcomeActivity.class));
-                                    overridePendingTransition(0, 0);
-                                    Toast.makeText(InfoProjet.this, "Tache supprimé !",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG, "Erreur lors de la suppression du projet", e);
-                                }
-                            });
+                if (listetaches != null){
+                    for (int i=0; i < listetaches.size();i++){
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        db.collection("Taches").document(listetaches.get(i))
+                                .delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "Projet supprimé avec succès !");
+                                        startActivity(new Intent(getApplicationContext(), welcomeActivity.class));
+                                        overridePendingTransition(0, 0);
+                                        Toast.makeText(InfoProjet.this, "Tache supprimé !",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Erreur lors de la suppression du projet", e);
+                                    }
+                                });
 
+                    }
                 }
                 db.collection("Projets").document(projetId)
                         .delete()
@@ -120,6 +124,7 @@ public class InfoProjet extends AppCompatActivity {
                 overridePendingTransition(0,0);
             }
         }));
+
         //Systeme de navigation entre les pages
         mAuth = FirebaseAuth.getInstance();
         nav = findViewById(R.id.nav);
