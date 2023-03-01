@@ -23,17 +23,19 @@
 
         <Button
             android:id="@+id/boutonuptadeproject"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="550dp"
-            android:layout_marginLeft="-50dp"
-            android:text="Update" />
+            android:layout_marginLeft="-80dp"
+            android:text="Update"
+            android:backgroundTint="@color/color_back_login"/>
         <Button
             android:id="@+id/supprimerprojet"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-50dp"
-            android:layout_marginLeft="100dp"
+            android:layout_marginTop="-48dp"
+            android:backgroundTint="@color/color_back_login"
+            android:layout_marginLeft="80dp"
             android:text="Supprimer" />
 
 
@@ -47,19 +49,23 @@
 
         <TextView
             android:id="@+id/datededebutdelaTache"
-            android:layout_width="130dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="42dp"
             android:layout_marginTop="70dp"
             android:text="Date de debut "
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:textColor="@color/color_back_login"
+            android:textStyle="bold"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="70dp"
             android:text="Du : "
-            android:textSize="20dp">
+            android:textSize="20dp"
+            android:textColor="@color/color_back_login"
+            android:textStyle="bold">
 
         </TextView>
         <TextView
@@ -67,42 +73,59 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="380dp"
             android:text="Status :  "
+            android:textColor="@color/color_back_login"
+            android:textStyle="bold"
+            android:layout_marginLeft="15dp"
             android:textSize="16dp">
 
         </TextView>
 
         <TextView
             android:id="@+id/datedefindelaTache"
-            android:layout_width="130dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="70dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="40dp"
             android:text="Date de Fin"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:textColor="@color/color_back_login"
+            android:textStyle="bold"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="205dp"
             android:layout_marginTop="70dp"
             android:text="Au : "
-            android:textSize="20dp">
+            android:textSize="20dp"
+            android:textColor="@color/color_back_login"
+            android:textStyle="bold">
 
         </TextView>
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_marginTop="133dp"
+            android:background="@drawable/custome_edittext">
         <TextView
             android:id="@+id/descriptiondelaTache"
             android:layout_width="match_parent"
             android:layout_height="140dp"
-            android:layout_marginTop="133dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:text="Description de la tache"
+            android:textColor="@color/black"
             android:textSize="16sp" />
+        </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="110dp"
             android:text="Description : "
-            android:textSize="16dp">
+            android:textSize="16dp"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/color_back_login"
+            android:textStyle="bold">
 
         </TextView>
         <TextView
@@ -111,6 +134,8 @@
             android:layout_height="140dp"
             android:layout_marginTop="400dp"
             android:text="Status"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <TextView
@@ -118,13 +143,18 @@
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:text="Participants"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/black"
             android:layout_marginTop="300dp"
             android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="270dp"
+            android:layout_marginTop="280dp"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/color_back_login"
+            android:textStyle="bold"
             android:text="Participants : "
             android:textSize="16dp">
 
