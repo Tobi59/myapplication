@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
@@ -100,7 +101,7 @@ public class addfriends extends AppCompatActivity {
                             List<String> signInMethods = task.getResult().getSignInMethods();
                             if (signInMethods != null && !signInMethods.isEmpty()) {
                                 // L'email existe dans Firebase Authentication
-                                addFriendsVerif();
+                                addFriendsVerif1();
                             }
                             else {
                                 System.out.println("here");
@@ -118,23 +119,47 @@ public class addfriends extends AppCompatActivity {
         });
     }
 
-    public void addFriendsVerif(){
+    public void addFriendsVerif1(){
         String ID = maddID.getText().toString();
         DatabaseReference ref = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(ID);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    addFriends(ID);
+                    addFriendsVerif2(ID);
                 } else {
                     Toast.makeText(addfriends.this, "Clef non valide",
                             Toast.LENGTH_SHORT).show();
-                    maddID.setText("");
-                    maddMail.setText("");
                 }
             }
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(addfriends.this, "Error lors de la récupération des infos dans la DB",
                         Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    public void addFriendsVerif2(String ID){
+        FirebaseUser currentUser = mAuth.getCurrentUser(); // récupère les infos de l'utilisateur actuel
+        String uid = currentUser.getUid(); // récupère l'ID de l'utilisateur actuel
+        DatabaseReference ref = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app")
+                .getReference("users")
+                .child(uid)
+                .child("friends");
+
+        // Vérifie si l'ID existe déjà dans la liste des amis de l'utilisateur actuel
+        ref.orderByValue().equalTo(ID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    // L'ID n'existe pas encore, donc on peut l'ajouter à la liste des amis
+                    addFriends(ID);
+                } else {
+                    Toast.makeText(addfriends.this, "L'ami existe déja",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
             }
         });
     }
@@ -165,8 +190,4 @@ public class addfriends extends AppCompatActivity {
         String uid = currentUser.getUid();//récupère l'ID de l'utilisateur actuel
         maddIDTextView.setText(uid);
     }
-
-
 }
-
-
