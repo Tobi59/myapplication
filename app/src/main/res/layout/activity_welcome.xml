@@ -55,28 +55,8 @@
             android:textSize="25sp"
             android:textStyle="bold"/>
 
-        <LinearLayout
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="32dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:background="@drawable/custome_edittext"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Création d'une application"
-                android:textColor="@color/black"
-                android:translationY="10dp"
-                android:layout_marginLeft="10dp"/>
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -88,7 +68,7 @@
                 android:translationY="-10dp"
                 android:layout_marginRight="20dp"/>
 
-        </LinearLayout>
+
     </RelativeLayout>
 
         <RelativeLayout
@@ -142,6 +122,20 @@
                     android:backgroundTint="@color/color_back_login"
                     android:id="@+id/photo"/>
             </LinearLayout>
+            <RelativeLayout
+                android:layout_marginTop="30dp"
+                android:layout_width="300dp"
+                android:layout_height="172dp"/>
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_viewprojet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+
+                />
 
 
         </RelativeLayout>

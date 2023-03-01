@@ -2,17 +2,21 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.PointerIcon;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -21,8 +25,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class welcomeActivity extends AppCompatActivity {
@@ -30,6 +39,14 @@ public class welcomeActivity extends AppCompatActivity {
     Button mphoto;
     //création de l'instance FireBase
     private FirebaseAuth mAuth;
+    private static final String TAG = "AddProjectActivity";
+
+    //Recycler Projet
+    private RecyclerView mRecyclerViewprojet;
+    private ProjetAdapter projetsAdapter;
+    private List<Projet> mProjetList = new ArrayList<>();
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private String id;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +88,40 @@ public class welcomeActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),PhotoMain.class));
             }
         });
+        //Recycler Projet
+        mRecyclerViewprojet = findViewById(R.id.recycler_viewprojet);
+        mRecyclerViewprojet.setHasFixedSize(true);
+        mRecyclerViewprojet.setLayoutManager(new LinearLayoutManager(welcomeActivity.this));
+        List<Projet> listeDeProjets = new ArrayList<>();
+        ProjetAdapter adapter = new ProjetAdapter(welcomeActivity.this, listeDeProjets, new ProjetAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Projet projet) {
+                Intent intent = new Intent(welcomeActivity.this, InfoProjet.class);
+                intent.putExtra("Projet", projet);
+                startActivity(intent);
+            }
+        });
+        mRecyclerViewprojet.setAdapter(adapter);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Projets")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Projet projet = documentSnapshot.toObject(Projet.class);
+                            listeDeProjets.add(projet);
+                            Log.d(TAG, "liste projets : "+ listeDeProjets);
+
+                        }
+                        adapter.notifyDataSetChanged(); // rafraîchit l'affichage de la RecyclerView
+                    }
+                });
+
+
+
+
+
     }
     //class qui vérifie si l'utilisateur n'est pas déjà connecté
     @Override

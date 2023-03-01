@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InfoProjet">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/nomduProjet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nom du projet"
+            android:textColor="@color/black"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/TachesduProjet"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="350dp" />
+
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/nav">
+
+        <TextView
+            android:id="@+id/datededebutduProjet"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="42dp"
+            android:layout_marginTop="70dp"
+            android:text="Date de debut "
+            android:textSize="20dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="70dp"
+            android:text="Du : "
+            android:textSize="20dp">
+
+        </TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="380dp"
+            android:text="Taches :  "
+            android:textSize="16dp">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/datedefinduProjet"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="70dp"
+            android:layout_marginEnd="30dp"
+            android:text="Date de Fin"
+            android:textSize="20dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="210dp"
+            android:layout_marginTop="70dp"
+            android:text="Au : "
+            android:textSize="20dp">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/descriptionduProjet"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_marginTop="133dp"
+            android:text="Description du projet"
+            android:textSize="16sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="110dp"
+            android:text="Description : "
+            android:textSize="16dp">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/ParticipantsduProjet"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:text="Participants"
+            android:layout_marginTop="300dp"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="270dp"
+            android:text="Participants : "
+            android:textSize="16dp">
+
+        </TextView>
+
+    </RelativeLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shape"
+        app:itemIconTint="@drawable/color_change"
+        app:itemTextColor="@drawable/color_change"
+        app:menu="@menu/menu_nav"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="677dp" />
+
+</RelativeLayout>
