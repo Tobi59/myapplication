@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InfoProjet">
+    tools:context=".InfoTache">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,29 +13,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/nomduProjet"
+            android:id="@+id/nomdelaTache"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nom du projet"
+            android:text="Nom de la Tache"
             android:textColor="@color/black"
             android:textSize="40sp"
             android:textStyle="bold" />
 
 
-        <TextView
-            android:id="@+id/TachesduProjet"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="350dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_viewtache"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-200dp"
-            android:layout_marginLeft="0dp"
-
-            />
 
 
     </LinearLayout>
@@ -46,7 +32,7 @@
         android:layout_above="@+id/nav">
 
         <TextView
-            android:id="@+id/datededebutduProjet"
+            android:id="@+id/datededebutdelaTache"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="42dp"
@@ -65,16 +51,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_marginTop="380dp"
-            android:text="Taches :  "
+            android:text="Status :  "
             android:textSize="16dp">
 
         </TextView>
 
-
         <TextView
-            android:id="@+id/datedefinduProjet"
+            android:id="@+id/datedefindelaTache"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -85,7 +69,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="210dp"
+            android:layout_marginLeft="205dp"
             android:layout_marginTop="70dp"
             android:text="Au : "
             android:textSize="20dp">
@@ -93,11 +77,11 @@
         </TextView>
 
         <TextView
-            android:id="@+id/descriptionduProjet"
+            android:id="@+id/descriptiondelaTache"
             android:layout_width="match_parent"
             android:layout_height="140dp"
             android:layout_marginTop="133dp"
-            android:text="Description du projet"
+            android:text="Description de la tache"
             android:textSize="16sp" />
         <TextView
             android:layout_width="wrap_content"
@@ -107,9 +91,16 @@
             android:textSize="16dp">
 
         </TextView>
+        <TextView
+            android:id="@+id/statusdelaTache"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_marginTop="400dp"
+            android:text="Status"
+            android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/ParticipantsduProjet"
+            android:id="@+id/ParticipantsdelaTache"
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:text="Participants"

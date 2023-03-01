@@ -115,6 +115,8 @@ public class addproject extends AppCompatActivity {
     private static final String TAG = "AddProjectActivity";
     String projetId;
     DocumentReference projetRefmaj;
+    ArrayList<String> Taches;
+
 
 
     @SuppressLint("MissingInflatedId")
@@ -260,6 +262,7 @@ public class addproject extends AppCompatActivity {
                     }
                 }
                 String selectedParticipantsString = selectedFriends.toString();
+                Taches.add(null);
                 //Creer le projet dans la databse
                 Map<String, Object> projetMap = new HashMap<>();
                 projetMap.put("id", id);
@@ -268,6 +271,7 @@ public class addproject extends AppCompatActivity {
                 projetMap.put("Date de Debut", selectedDateStringDebut );
                 projetMap.put("Date de Fin", selectedDateStringFin );
                 projetMap.put("Participants",selectedParticipantsString);
+                projetMap.put("Taches", Taches);
 
                 projetsRef.add(projetMap)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
