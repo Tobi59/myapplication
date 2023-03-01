@@ -113,12 +113,12 @@ public class addfriends extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
         String uid = currentUser.getUid();//récupère l'ID de l'utilisateur actuel
         DatabaseReference ref = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(uid).child("friends");
-        ref.push().setValue(mailFriend);
+        ref.push().setValue(ID);
 
         //*******************AJOUT L'UTILISATEUR ACTUEL A L'AMI
         String currentMail = currentUser.getEmail();
         DatabaseReference refFriend = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(ID).child("friends");
-        refFriend.push().setValue(currentMail);
+        refFriend.push().setValue(uid);
         Toast.makeText(addfriends.this, "Ami ajouté !",
                 Toast.LENGTH_SHORT).show();
         maddID.setText("");

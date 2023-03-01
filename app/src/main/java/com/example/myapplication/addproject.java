@@ -21,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,14 +31,21 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +62,7 @@ public class addproject extends AppCompatActivity {
     private String DateFin;
 
     private String participants;
+    private FirebaseAuth mAuth;
 
     public addproject(){
 
@@ -89,10 +98,9 @@ public class addproject extends AppCompatActivity {
 
     BottomNavigationView nav;
     //création de l'instance FireBase
-    private FirebaseAuth mAuth;
 
 
-    String[] friends = {"Alice", "Bob", "Charlie", "Dave", "Eve", "Frank"};
+    String[] friends= new String[0];
     private ListView mFriendsListView;
     private ArrayAdapter<String> mFriendsAdapter;
     private Button BoutonCreation;
@@ -111,6 +119,10 @@ public class addproject extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addproject);
 
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
+        String uid = currentUser.getUid();//récupère l'ID de l'utilisateur actuel
+        DatabaseReference ref = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(uid).child("friends");
         //Initialisé la firebase pour Projets
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference projetsRef = db.collection("Projets");
@@ -186,8 +198,37 @@ public class addproject extends AppCompatActivity {
         });
         //Selection des participants
         mFriendsListView = findViewById(R.id.friends_listview);
-        mFriendsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, friends);
+        ref.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DataSnapshot dataSnapshot = task.getResult();
+
+                // Parcourir tous les sous-nœuds de "friends" et stocker les valeurs dans une liste de chaînes de caractères
+                List<String> friendsValues = new ArrayList<>();
+                for (DataSnapshot friendSnapshot : dataSnapshot.getChildren()) {
+                    String friendValue = friendSnapshot.getValue(String.class);
+                    DatabaseReference refFriend = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(friendValue);
+                    refFriend.get().addOnCompleteListener(task2 -> {
+                        if (!task2.isSuccessful()) {
+                            Log.e("firebase", "Error getting data", task2.getException());//debug
+                        }
+                        else {
+                            Map<String, Object> result = (Map<String, Object>) task2.getResult().getValue();
+                            String username = (String) result.get("username");
+                            System.out.println(username);//debug
+                            friendsValues.add(username);
+                            friends = friendsValues.toArray(new String[0]);
+                            System.out.println(Arrays.toString(friends));
+                            mFriendsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, friends);
+                            mFriendsListView.setAdapter(mFriendsAdapter);
+                        }
+                    });
+                }
+            } else {
+                Log.e("firebase", "Error getting data", task.getException());
+            }
+        });
         mFriendsListView.setAdapter(mFriendsAdapter);
+        mFriendsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, friends);
         mFriendsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         BoutonCreation = findViewById(R.id.button_creation);
@@ -284,6 +325,7 @@ public class addproject extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+
         // vérifie que l'utilisateur n'est pas connecté, mets à jour l'UI si besoin
         FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
         if(currentUser==null){
