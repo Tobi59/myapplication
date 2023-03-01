@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,11 +25,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class addfriends extends AppCompatActivity {
 
     Button ButtonAdd;
     EditText maddID;
     EditText maddMail;
+
+    TextView maddIDTextView;
 
     BottomNavigationView nav;
     //création de l'instance FireBase
@@ -44,6 +50,7 @@ public class addfriends extends AppCompatActivity {
         ButtonAdd = findViewById(R.id.add);
         maddID = findViewById(R.id.addID);
         maddMail=findViewById(R.id.addMail);
+        maddIDTextView=findViewById(R.id.textViewID);
         nav = findViewById(R.id.nav);
         nav.setSelectedItemId(R.id.add_friends);
 
@@ -76,8 +83,8 @@ public class addfriends extends AppCompatActivity {
         });
 
         ButtonAdd.setOnClickListener(view -> {
-            String uID = maddID.getText().toString().trim();
             String Mail = maddMail.getText().toString().trim();
+            String uID = maddID.getText().toString().trim();
             if(TextUtils.isEmpty(uID)){
                 maddID.setError("Remplissez l'ID");
                 return;
@@ -86,27 +93,51 @@ public class addfriends extends AppCompatActivity {
                 maddMail.setError("Remplissez le mail");
                 return;
             }
-            String ID = maddID.getText().toString();
-            DatabaseReference ref = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(ID);
-            ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        addFriends(ID);
-                    } else {
-                        Toast.makeText(addfriends.this, "Clef non valide",
-                                Toast.LENGTH_SHORT).show();
-                        maddID.setText("");
-                        maddMail.setText("");
-                    }
-                }
-                public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(addfriends.this, "Error lors de la récupération des infos dans la DB",
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            auth.fetchSignInMethodsForEmail(Mail)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<String> signInMethods = task.getResult().getSignInMethods();
+                            if (signInMethods != null && !signInMethods.isEmpty()) {
+                                // L'email existe dans Firebase Authentication
+                                addFriendsVerif();
+                            }
+                            else {
+                                System.out.println("here");
+                                Toast.makeText(addfriends.this, "Mauvais mail",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            // Une erreur s'est produite
+                            Exception e = task.getException();
+                            Toast.makeText(addfriends.this, "Mauvais mail",
+                                    Toast.LENGTH_SHORT).show();
+                            // Gérer les erreurs ici
+                        }
+                    });
         });
     }
 
+    public void addFriendsVerif(){
+        String ID = maddID.getText().toString();
+        DatabaseReference ref = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(ID);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    addFriends(ID);
+                } else {
+                    Toast.makeText(addfriends.this, "Clef non valide",
+                            Toast.LENGTH_SHORT).show();
+                    maddID.setText("");
+                    maddMail.setText("");
+                }
+            }
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(addfriends.this, "Error lors de la récupération des infos dans la DB",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     public void addFriends(String ID){
         //*************AJOUT DE L'AMI POUR UTILISATEUR ACTUEL********************
         String mailFriend = maddMail.getText().toString();
@@ -131,6 +162,8 @@ public class addfriends extends AppCompatActivity {
         if(currentUser==null){
             startActivity(new Intent(getApplicationContext(),register.class));
         }
+        String uid = currentUser.getUid();//récupère l'ID de l'utilisateur actuel
+        maddIDTextView.setText(uid);
     }
 
 
