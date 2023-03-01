@@ -209,7 +209,7 @@ public class addproject extends AppCompatActivity {
                 DataSnapshot dataSnapshot = task.getResult();
 
                 // Parcourir tous les sous-nœuds de "friends" et stocker les valeurs dans une liste de chaînes de caractères
-                List<String> friendsValues = new ArrayList<>();
+                ArrayList<String> friendsValues = new ArrayList<>();
                 for (DataSnapshot friendSnapshot : dataSnapshot.getChildren()) {
                     String friendValue = friendSnapshot.getValue(String.class);
                     DatabaseReference refFriend = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(friendValue);
@@ -259,10 +259,11 @@ public class addproject extends AppCompatActivity {
                 for (int i = 0; i < mFriendsAdapter.getCount(); i++) {
                     if (mFriendsListView.isItemChecked(i)) {
                         selectedFriends.add(mFriendsAdapter.getItem(i));
+                        System.out.println(mFriendsAdapter.getItem(i));
+
                     }
                 }
-                String selectedParticipantsString = selectedFriends.toString();
-                Taches.add(null);
+                //String selectedParticipantsString = selectedFriends.toString();
                 //Creer le projet dans la databse
                 Map<String, Object> projetMap = new HashMap<>();
                 projetMap.put("id", id);
@@ -270,7 +271,7 @@ public class addproject extends AppCompatActivity {
                 projetMap.put("Description", textDescriptionEditText.getText().toString());
                 projetMap.put("Date de Debut", selectedDateStringDebut );
                 projetMap.put("Date de Fin", selectedDateStringFin );
-                projetMap.put("Participants",selectedParticipantsString);
+                projetMap.put("Participants",selectedFriends);
                 projetMap.put("Taches", Taches);
 
                 projetsRef.add(projetMap)
