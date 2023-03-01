@@ -103,25 +103,44 @@ public class welcomeActivity extends AppCompatActivity {
         });
         mRecyclerViewprojet.setAdapter(adapter);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Projets")
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            Projet projet = documentSnapshot.toObject(Projet.class);
-                            listeDeProjets.add(projet);
-                            Log.d(TAG, "liste projets : "+ listeDeProjets);
 
-                        }
-                        adapter.notifyDataSetChanged(); // rafraîchit l'affichage de la RecyclerView
-                    }
-                });
+        //user actuel
+        FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
+        String uid = currentUser.getUid();//récupère l'ID de l'utilisateur actuel
+        DatabaseReference ref = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(uid);
+        ref.get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());//debug
+            }
+            else {
+                // Récupérer le résultat sous forme de Map<String, Object>
+                Map<String, Object> result = (Map<String, Object>) task.getResult().getValue();
+                // Extraire la valeur de "username"
+                String username = (String) result.get("username");
+                db.collection("Projets")
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                    Projet projet = documentSnapshot.toObject(Projet.class);
+                                    List<String> ListUser = projet.getParticipants();
+                                    if(ListUser!=null){
+                                        for(int i=0;i<ListUser.size();i++){
+                                            if(username.equals(ListUser.get(i))){
+                                                listeDeProjets.add(projet);
+                                            }
+                                        }
+                                    }
+                                    Log.d(TAG, "liste projets : "+ listeDeProjets);
 
+                                }
+                                adapter.notifyDataSetChanged(); // rafraîchit l'affichage de la RecyclerView
+                            }
+                        });
 
-
-
-
+            }
+        });
     }
     //class qui vérifie si l'utilisateur n'est pas déjà connecté
     @Override
