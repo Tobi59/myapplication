@@ -39,18 +39,21 @@
 
         <Button
             android:id="@+id/boutonuptadeproject"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="-80dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="-50dp"
-            android:text="Update" />
+            android:text="Update"
+            android:paddingLeft="10dp"
+            android:backgroundTint="@color/color_back_login"/>
         <Button
             android:id="@+id/supprimerprojet"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-50dp"
-            android:layout_marginLeft="100dp"
-            android:text="Supprimer" />
+            android:layout_marginTop="-48dp"
+            android:layout_marginLeft="80dp"
+            android:text="Supprimer"
+            android:backgroundTint="@color/color_back_login"/>
 
 
 
@@ -63,11 +66,13 @@
 
         <TextView
             android:id="@+id/datededebutduProjet"
-            android:layout_width="130dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="42dp"
             android:layout_marginTop="70dp"
             android:text="Date de debut "
+            android:textColor="@color/color_back_login"
+            android:textStyle="bold"
             android:textSize="20dp" />
         <TextView
             android:layout_width="wrap_content"
@@ -75,15 +80,19 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="70dp"
             android:text="Du : "
+            android:textStyle="bold"
+            android:textColor="@color/color_back_login"
             android:textSize="20dp">
 
         </TextView>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:textColor="@color/color_back_login"
+            android:textStyle="bold"
             android:layout_marginTop="380dp"
             android:text="Taches :  "
+            android:layout_marginLeft="15dp"
             android:textSize="16dp">
 
         </TextView>
@@ -95,7 +104,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="70dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/color_back_login"
             android:text="Date de Fin"
             android:textSize="20dp" />
         <TextView
@@ -104,42 +115,64 @@
             android:layout_marginLeft="210dp"
             android:layout_marginTop="70dp"
             android:text="Au : "
+            android:textColor="@color/color_back_login"
+            android:textStyle="bold"
             android:textSize="20dp">
 
         </TextView>
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:layout_marginTop="133dp"
+    android:background="@drawable/custome_edittext">
         <TextView
             android:id="@+id/descriptionduProjet"
             android:layout_width="match_parent"
             android:layout_height="140dp"
-            android:layout_marginTop="133dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:text="Description du projet"
+            android:textColor="@color/black"
             android:textSize="16sp" />
+
+</LinearLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="110dp"
+            android:layout_marginLeft="15dp"
             android:text="Description : "
+            android:textColor="@color/color_back_login"
+            android:textStyle="bold"
             android:textSize="16dp">
 
         </TextView>
+
 
         <TextView
             android:id="@+id/ParticipantsduProjet"
             android:layout_width="match_parent"
             android:layout_height="75dp"
+            android:layout_marginLeft="10dp"
             android:text="Participants"
-            android:layout_marginTop="300dp"
+            android:textColor="@color/black"
+            android:layout_marginTop="302dp"
             android:textSize="16sp" />
+
+
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="270dp"
+            android:layout_marginTop="280dp"
+            android:layout_marginLeft="15dp"
             android:text="Participants : "
+            android:textColor="@color/color_back_login"
+            android:textStyle="bold"
             android:textSize="16dp">
-
         </TextView>
+
 
     </RelativeLayout>
 
