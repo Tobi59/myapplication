@@ -58,15 +58,7 @@
 
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Voir +"
-                android:textColor="@color/color_back_login"
-                android:textStyle="bold"
-                android:translationX="130dp"
-                android:translationY="-10dp"
-                android:layout_marginRight="20dp"/>
+
 
 
     </RelativeLayout>
@@ -114,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="300dp"
-                android:layout_marginLeft="130dp">
+                android:layout_marginLeft="135dp">
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -122,10 +114,10 @@
                     android:backgroundTint="@color/color_back_login"
                     android:id="@+id/photo"/>
             </LinearLayout>
-            <RelativeLayout
-                android:layout_marginTop="30dp"
-                android:layout_width="300dp"
-                android:layout_height="172dp"/>
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="180dp">
 
 
 
@@ -133,9 +125,11 @@
                 android:id="@+id/recycler_viewprojet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="15dp" />
 
-                />
+
+
+            </LinearLayout>
 
 
         </RelativeLayout>
