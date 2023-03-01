@@ -21,6 +21,20 @@
             android:textSize="40sp"
             android:textStyle="bold" />
 
+        <Button
+            android:id="@+id/boutonuptadeproject"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="550dp"
+            android:layout_marginLeft="-50dp"
+            android:text="Update" />
+        <Button
+            android:id="@+id/supprimerprojet"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-50dp"
+            android:layout_marginLeft="100dp"
+            android:text="Supprimer" />
 
 
 
@@ -115,6 +129,7 @@
             android:textSize="16dp">
 
         </TextView>
+
 
     </RelativeLayout>
 

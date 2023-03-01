@@ -15,12 +15,15 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
+            android:name=".updateproject"
+            android:exported="false" />
+        <activity
             android:name=".InfoTache"
             android:exported="false" />
         <activity
             android:name=".TacheAdapter"
             android:exported="false"
-            tools:ignore="Instantiatable"/>
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".InfoProjet"
             android:exported="false" />

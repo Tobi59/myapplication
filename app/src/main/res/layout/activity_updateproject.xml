@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    tools:context=".updateproject">
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shape"
+        app:itemIconTint="@drawable/color_change"
+        app:itemTextColor="@drawable/color_change"
+        app:menu="@menu/menu_nav"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="677dp" />
+
+
+    <Button
+        android:id="@+id/Datededebut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="70dp"
+        android:ems="10"
+        android:backgroundTint="@color/color_back_login"
+        android:text=" Date de debut"
+        />
+
+
+    <Button
+        android:id="@+id/Datedefin"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:ems="10"
+        android:backgroundTint="@color/color_back_login"
+        android:text="Date de fin" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/Project_Name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nom du Projet" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/Description"
+        android:layout_width="match_parent"
+        android:layout_height="223dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="170dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description du projet" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/participants_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="80dp"
+        android:backgroundTint="@color/white"
+        android:hint="Sélectionnez les participants" />
+
+    <ListView
+        android:id="@+id/friends_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:background="@color/white"
+        android:elevation="10dp"
+        android:visibility="gone"
+        />
+
+    <Button
+        android:id="@+id/buttonuptade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="575dp"
+        android:layout_marginEnd="80dp"
+        android:backgroundTint="@color/color_back_login"
+        android:text="Update le projet" />
+
+    <RelativeLayout
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:background="@drawable/addprojecttash"
+        android:layout_marginTop="400dp"
+        android:layout_marginLeft="120dp"/>
+
+
+
+</RelativeLayout>
+
+
+
+
+
