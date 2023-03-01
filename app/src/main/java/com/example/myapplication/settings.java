@@ -135,6 +135,7 @@ public class settings extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+        mnewEmail.setText("");
     }
     //fonction pour mettre à jour l'adresse email
     public void updatePassword(String password) {
@@ -172,6 +173,7 @@ public class settings extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+        mnewMDP.setText("");
     }
     public void updateUsername(String username){
         Map<String, Object> enfantUpdates = new HashMap<>();
@@ -197,6 +199,7 @@ public class settings extends AppCompatActivity {
         ref.updateChildren(enfantUpdates);
         Toast.makeText(settings.this, "Username changé !",
                 Toast.LENGTH_SHORT).show();
+        mnewUsername.setText("");
     }
     public void onStart() {
         super.onStart();
