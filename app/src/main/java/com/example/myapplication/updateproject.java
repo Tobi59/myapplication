@@ -54,9 +54,8 @@ import java.util.Locale;
 import java.util.Calendar;
 import java.util.Map;
 
-@IgnoreExtraProperties
 public class updateproject extends AppCompatActivity {
-    private int id;
+    private String id;
     private String nom;
     private String description;
     private String DateDebut;
@@ -69,7 +68,7 @@ public class updateproject extends AppCompatActivity {
 
     }
 
-    public updateproject(int id, String nom, String description) {
+    public updateproject(String id, String nom, String description) {
         this.id = id;
         this.nom = nom;
         this.description = description;
@@ -123,7 +122,7 @@ public class updateproject extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addproject);
+        setContentView(R.layout.activity_updateproject);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
@@ -133,14 +132,19 @@ public class updateproject extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference projetsRef = db.collection("Projets");
 
-
+        Intent intent = getIntent();
+        Projet projet = (Projet) intent.getSerializableExtra("Projet");
+        //id = projet.getId();
+        Log.d(TAG, "id "+id);
 
         //Recuperer le nom du projet
         TextInputLayout textProjectName = findViewById(R.id.Project_Name);
         TextInputEditText textProjectNameEditText = (TextInputEditText) textProjectName.getEditText();
+        textProjectNameEditText.setText(intent.getStringExtra("Nom"));
         //Description
         TextInputLayout textDescription = findViewById(R.id.Description);
         TextInputEditText textDescriptionEditText = (TextInputEditText) textDescription.getEditText();
+        textProjectNameEditText.setText(intent.getStringExtra("Description"));
         //la date de debut
         Button Datededebut =findViewById(R.id.Datededebut);
         final Context context = this;
@@ -269,9 +273,10 @@ public class updateproject extends AppCompatActivity {
                 updateData.put("DatedeDebut", selectedDateStringDebut);
                 updateData.put("DatedeFin", selectedDateStringFin);
                 updateData.put("Participants", selectedParticipantsString);
-                updateData.put("Taches", Taches);
+
 
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
+                Log.d(TAG,"id"+id);
                 DocumentReference docRef = db.collection("Projets").document(String.valueOf(id));
 
                 docRef.update(updateData)

@@ -58,6 +58,9 @@ public class InfoProjet extends AppCompatActivity {
 
         Intent intent = getIntent();
         Projet projet = (Projet) intent.getSerializableExtra("Projet");
+
+
+        Log.d(TAG, "id : " + projet.getId());
         projetId = projet.getId();
         listetaches = projet.getTaches();
         supprbouton = findViewById(R.id.supprimerprojet);
@@ -107,6 +110,7 @@ public class InfoProjet extends AppCompatActivity {
                         });
             }
         });
+
 
         updateprojet = findViewById(R.id.boutonuptadeproject);
         updateprojet.setOnClickListener((new View.OnClickListener() {

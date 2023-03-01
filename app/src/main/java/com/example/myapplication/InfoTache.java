@@ -51,8 +51,8 @@ public class InfoTache extends AppCompatActivity {
         setContentView(R.layout.activity_info_tache);
         Intent intent = getIntent();
         Tache tache = (Tache) intent.getSerializableExtra("Tache");
-        Projet projet = (Projet) intent.getSerializableExtra("Projet");
-        projetId = projet.getId();
+        //Projet projet = (Projet) intent.getSerializableExtra("Projet");
+        //projetId = projet.getId();
         tacheId = tache.getId();
 
         supprbouton = findViewById(R.id.supprimerprojet);
@@ -60,7 +60,7 @@ public class InfoTache extends AppCompatActivity {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             @Override
             public void onClick(View view) {
-                DocumentReference projetRef = db.collection("Projets").document(projetId);
+                /*DocumentReference projetRef = db.collection("Projets").document(projetId);
 
                 projetRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -96,7 +96,7 @@ public class InfoTache extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         // Erreur lors de la récupération du document
                     }
-                });
+                });*/
                 db.collection("Taches").document(tacheId)
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
