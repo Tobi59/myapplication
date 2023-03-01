@@ -251,63 +251,68 @@ public class addproject extends AppCompatActivity {
             }
         }));
         BoutonCreation.setOnClickListener(new View.OnClickListener() {
-            @Override
+            DatabaseReference refUsername = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(uid).child("username");
+            String username;
             public void onClick(View view) {
                 String userProjectName = textProjectNameEditText.getText().toString();
                 String userDescription = textDescriptionEditText.getText().toString();
+
                 ArrayList<String> selectedFriends = new ArrayList<>();
-                for (int i = 0; i < mFriendsAdapter.getCount(); i++) {
-                    if (mFriendsListView.isItemChecked(i)) {
-                        selectedFriends.add(mFriendsAdapter.getItem(i));
-                        System.out.println(mFriendsAdapter.getItem(i));
-
-                    }
-                }
-                //String selectedParticipantsString = selectedFriends.toString();
-                //Creer le projet dans la databse
-                Map<String, Object> projetMap = new HashMap<>();
-                projetMap.put("id", id);
-                projetMap.put("Nom", textProjectNameEditText.getText().toString());
-                projetMap.put("Description", textDescriptionEditText.getText().toString());
-                projetMap.put("Date de Debut", selectedDateStringDebut );
-                projetMap.put("Date de Fin", selectedDateStringFin );
-                projetMap.put("Participants",selectedFriends);
-                projetMap.put("Taches", Taches);
-
-                projetsRef.add(projetMap)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "Projet ajouté avec l'ID : " + documentReference.getId());
-                                projetId = documentReference.getId();
-                                projetRefmaj = db.collection("Projets").document(String.valueOf(projetId));
-                                String id = "id";
-                                projetRefmaj.get().addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot document = task.getResult();
-                                        projetRefmaj.update(id, projetId)
-                                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Champ " + id + " mis à jour avec succès!"))
-                                                .addOnFailureListener(e -> Log.w(TAG, "Erreur lors de la mise à jour du champ " + id, e));
+                refUsername.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        username = snapshot.getValue(String.class);
+                        for (int i = 0; i < mFriendsAdapter.getCount(); i++) {
+                            if (mFriendsListView.isItemChecked(i)) {
+                                selectedFriends.add(mFriendsAdapter.getItem(i));
+                            }
+                        }
+                        selectedFriends.add(username);
+                        //String selectedParticipantsString = selectedFriends.toString();
+                        //Creer le projet dans la databse
+                        Map<String, Object> projetMap = new HashMap<>();
+                        projetMap.put("id", id);
+                        projetMap.put("Nom", textProjectNameEditText.getText().toString());
+                        projetMap.put("Description", textDescriptionEditText.getText().toString());
+                        projetMap.put("Date de Debut", selectedDateStringDebut );
+                        projetMap.put("Date de Fin", selectedDateStringFin );
+                        projetMap.put("Participants",selectedFriends);
+                        projetMap.put("Taches", Taches);
+                        projetsRef.add(projetMap)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Log.d(TAG, "Projet ajouté avec l'ID : " + documentReference.getId());
+                                        projetId = documentReference.getId();
+                                        projetRefmaj = db.collection("Projets").document(String.valueOf(projetId));
+                                        String id = "id";
+                                        projetRefmaj.get().addOnCompleteListener(task -> {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                projetRefmaj.update(id, projetId)
+                                                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Champ " + id + " mis à jour avec succès!"))
+                                                        .addOnFailureListener(e -> Log.w(TAG, "Erreur lors de la mise à jour du champ " + id, e));
+                                            }
+                                            else {
+                                                Log.w(TAG, "Erreur lors de la récupération du document", task.getException());
+                                            }
+                                        });
                                     }
-                                    else {
-                                        Log.w(TAG, "Erreur lors de la récupération du document", task.getException());
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Erreur lors de l'ajout du projet", e);
                                     }
                                 });
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Erreur lors de l'ajout du projet", e);
-                            }
-                        });
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Gérer les erreurs ici
+                    }
+                });
             }
-
-
-
-
         });
-
 
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(
         //        this, android.R.layout.simple_dropdown_item_1line, friends);
