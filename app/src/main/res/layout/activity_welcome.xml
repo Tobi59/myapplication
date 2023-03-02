@@ -68,40 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="300dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mes amis"
-            android:textColor="@color/color_back_login"
-            android:textSize="25sp"
-            android:layout_marginTop="200dp"
-            android:textStyle="bold"
-            android:fontFamily="@font/lhandw"/>
 
-            <LinearLayout
-                android:layout_width="256dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="240dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="32dp"
-                android:background="@drawable/custome_edittext"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Nom prénom"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/black"
-                    android:translationY="10dp" />
-
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -117,16 +84,14 @@
             <LinearLayout
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
-                android:layout_height="180dp">
+                android:layout_height="300dp">
 
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_viewprojet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp" />
-
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_viewprojet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="300dp"
+                    android:layout_marginTop="15dp" />
 
 
             </LinearLayout>
