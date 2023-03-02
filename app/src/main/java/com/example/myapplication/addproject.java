@@ -292,6 +292,7 @@ public class addproject extends AppCompatActivity {
                                                 projetRefmaj.update(id, projetId)
                                                         .addOnSuccessListener(aVoid -> Log.d(TAG, "Champ " + id + " mis à jour avec succès!"))
                                                         .addOnFailureListener(e -> Log.w(TAG, "Erreur lors de la mise à jour du champ " + id, e));
+                                                startActivity(new Intent(getApplicationContext(),welcomeActivity.class));
                                             }
                                             else {
                                                 Log.w(TAG, "Erreur lors de la récupération du document", task.getException());
