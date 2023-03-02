@@ -96,7 +96,8 @@ public class addtasks extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();//récupère les infos de l'utilisteur actuel
         String uid = currentUser.getUid();//récupère l'ID de l'utilisateur actuel
-        DatabaseReference ref = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(uid).child("friends");
+        DatabaseReference ref = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(uid);
+        DatabaseReference refFriends = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(uid).child("friends");
         nav=findViewById(R.id.nav);
         nav.setSelectedItemId(R.id.add_project);
         nav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -132,35 +133,53 @@ public class addtasks extends AppCompatActivity {
         // Créer une HashMap pour stocker les projets
         HashMap<String, String> projetsMap = new HashMap<>();
 
-// Récupérez tous les documents de la collection "Projets"
-        projetsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                // Parcourez tous les documents dans le QuerySnapshot
-                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    // Vérifiez si le document existe
-                    if (documentSnapshot.exists()) {
-                        // Récupérez l'ID du projet
-                        String id = documentSnapshot.getId();
-                        // Récupérez la valeur du champ "Nom" pour chaque document
-                        String nom = documentSnapshot.getString("Nom");
-                        Nomdeprojet.add(nom);
-                        // Ajouter l'ID et le nom du projet à la HashMap
-                        projetsMap.put(id, nom);
-                        Log.d(TAG, "ID du projet : " + id + ", Nom du projet : " + nom);
-                    } else {
-                        Log.d(TAG, "Aucun document trouvé pour cet ID");
-                    }
-                }
+        // Récupérez tous les documents de la collection "Projets"
+        //user actuel
+        ref.get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());//debug
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Erreur lors de la récupération des documents", e);
+            else {
+                // Récupérer le résultat sous forme de Map<String, Object>
+                Map<String, Object> result = (Map<String, Object>) task.getResult().getValue();
+                // Extraire la valeur de "username"
+                String username = (String) result.get("username");
+                projetsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        // Parcourez tous les documents dans le QuerySnapshot
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            // Vérifiez si le document existe
+                            if (documentSnapshot.exists()) {
+                                // Récupérez l'ID du projet
+                                String id = documentSnapshot.getId();
+                                Projet projet = documentSnapshot.toObject(Projet.class);
+                                List<String> ListUser = projet.getParticipants();
+                                if(ListUser!=null){
+                                    for(int i=0;i<ListUser.size();i++){
+                                        if(username.equals(ListUser.get(i))){
+                                            // Récupérez la valeur du champ "Nom" pour chaque document
+                                            String nom = documentSnapshot.getString("Nom");
+                                            Nomdeprojet.add(nom);
+                                            // Ajouter l'ID et le nom du projet à la HashMap
+                                            projetsMap.put(id, nom);
+                                        }
+                                    }
+                                }
+                                Log.d(TAG, "ID du projet : " + id);
+                            } else {
+                                Log.d(TAG, "Aucun document trouvé pour cet ID");
+                            }
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Erreur lors de la récupération des documents", e);
+                    }
+                });
             }
         });
-
-
 
         //Recuperer le nom de la tache
         TextInputLayout textTacheName = findViewById(R.id.Tache_Nom);
@@ -177,7 +196,7 @@ public class addtasks extends AppCompatActivity {
 
         //Systeme de Participants
         mFriendsListView = findViewById(R.id.friends_listview);
-        ref.get().addOnCompleteListener(task -> {
+        refFriends.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DataSnapshot dataSnapshot = task.getResult();
 
@@ -185,7 +204,7 @@ public class addtasks extends AppCompatActivity {
                 List<String> friendsValues = new ArrayList<>();
                 for (DataSnapshot friendSnapshot : dataSnapshot.getChildren()) {
                     String friendValue = friendSnapshot.getValue(String.class);
-                    DatabaseReference refFriend = FirebaseDatabase.getInstance(" https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(friendValue);
+                    DatabaseReference refFriend = FirebaseDatabase.getInstance("https://myapplicationfirebase-7505e-default-rtdb.europe-west1.firebasedatabase.app").getReference("users").child(friendValue);
                     refFriend.get().addOnCompleteListener(task2 -> {
                         if (!task2.isSuccessful()) {
                             Log.e("firebase", "Error getting data", task2.getException());//debug
